@@ -15,8 +15,10 @@ const App = (() => {
   let appliedPromo = null;
   let promoBannerDismissed = sessionStorage.getItem('fpa.promoDismiss') === '1';
   let loading = true;
+  let settings = {};
 
-  const WHATSAPP_NUMBER = '';
+  function cfg(key, fallback) { return settings[key] !== undefined ? settings[key] : fallback; }
+  function whatsappNumber() { return cfg('whatsapp_number', ''); }
 
   // ---------- helpers ----------
   function toast(msg) {
@@ -83,6 +85,9 @@ const App = (() => {
     if (p.oldPrice) {
       const off = Math.round((1 - p.price / p.oldPrice) * 100);
       html += `<span class="badge badge-discount">-${off}%</span>`;
+    }
+    if (cfg('urgency_badges', true) && p.stock > 0 && p.stock <= cfg('urgency_threshold', 12)) {
+      html += `<span class="badge badge-discount" style="background:var(--color-warning);color:var(--color-text-on-gold)">Apenas ${p.stock} un.!</span>`;
     }
     return html;
   }
@@ -197,7 +202,7 @@ const App = (() => {
               <div>
                 <span class="eyebrow">Encomenda sob medida</span>
                 <h2 class="mt-4">N\u00e3o achou em estoque? <em>Encomende</em></h2>
-                <p class="text-md mt-4" style="max-width:560px">Reservamos seu perfume com importa\u00e7\u00e3o direta de Dubai. Pagamento com <strong style="color:var(--color-gold)">50% de sinal</strong> e o restante na chegada. Prazo m\u00e9dio de 14-21 dias.</p>
+                <p class="text-md mt-4" style="max-width:560px">Reservamos seu perfume com importa\u00e7\u00e3o direta de Dubai. Pagamento com <strong style="color:var(--color-gold)">sinal de reserva</strong> e o restante na chegada. Prazo m\u00e9dio de 14-21 dias.</p>
               </div>
               <button class="btn btn-primary" data-go="preorders">Ver encomendas</button>
             </div>
@@ -432,9 +437,9 @@ const App = (() => {
               <div style="display:flex;flex-direction:column;align-items:flex-end;gap:var(--sp-2);justify-content:center">
                 <div style="font-family:var(--font-serif);color:var(--color-gold);font-size:var(--fs-lg)">${BRL(p.price * qty)}</div>
                 <div class="flex gap-2 items-center">
-                  <button class="btn-icon" style="width:32px;height:32px" data-action="dec" data-id="${p.id}">-</button>
+                  <button class="btn-icon" style="width:44px;height:44px" data-action="dec" data-id="${p.id}">-</button>
                   <span style="min-width:24px;text-align:center">${qty}</span>
-                  <button class="btn-icon" style="width:32px;height:32px" data-action="inc" data-id="${p.id}">+</button>
+                  <button class="btn-icon" style="width:44px;height:44px" data-action="inc" data-id="${p.id}">+</button>
                 </div>
                 <button class="text-lo" data-action="remove" data-id="${p.id}" style="font-size:var(--fs-xs)">remover</button>
               </div>
@@ -471,7 +476,7 @@ const App = (() => {
           </div>
           ${hasPreorder ? `
             <p class="text-lo mt-4" style="font-size:var(--fs-xs)">
-              Sua sacola cont\u00e9m encomendas. No checkout voc\u00ea poder\u00e1 pagar o <strong style="color:var(--color-gold)">total agora</strong> ou apenas <strong style="color:var(--color-gold)">o sinal (50%)</strong> e o restante na chegada do produto.
+              Sua sacola cont\u00e9m encomendas. No checkout voc\u00ea poder\u00e1 pagar o <strong style="color:var(--color-gold)">total agora</strong> ou apenas <strong style="color:var(--color-gold)">o sinal</strong> e o restante na chegada do produto.
             </p>
           ` : ''}
           <button class="btn btn-primary btn-block btn-lg mt-5" data-action="checkout">Finalizar pedido</button>
@@ -563,7 +568,7 @@ const App = (() => {
     });
     updateCartBadge();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(initAutoCarousels, 50);
+    if (cfg('auto_carousel', true)) setTimeout(initAutoCarousels, 50);
   }
 
   function go(view, opts = {}) {
@@ -587,6 +592,7 @@ const App = (() => {
     if (existing) existing.qty += 1;
     else cart.push({ id, qty: 1 });
     DataStore.saveCart(cart);
+    localStorage.setItem('fpa.cartTime', Date.now().toString());
     updateCartBadge();
     const p = products.find(x => x.id === id);
     toast(p && p.kind === 'preorder' ? 'Encomenda adicionada' : 'Adicionado \u00e0 sacola');
@@ -746,29 +752,35 @@ const App = (() => {
         msg += `%0A%0APagamento: \u00e0 vista (${BRL(total)}).`;
       }
 
-      const baseUrl = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : 'https://wa.me/';
+      const wn = whatsappNumber(); const baseUrl = wn ? `https://wa.me/${wn}` : 'https://wa.me/';
       window.open(`${baseUrl}?text=${msg}`, '_blank');
 
       // Save order to Supabase
-      const orderId = 'F-' + Date.now().toString(36).toUpperCase();
-      await DataStore.saveOrder({
-        id: orderId,
-        customer: name,
-        phone,
-        city: '',
-        items: cLines.reduce((s, l) => s + l.qty, 0),
-        total,
-        paid: payNow,
-        kind: hasPreorder ? 'preorder' : 'stock',
-        status: hasPreorder && payment === 'partial' ? 'Sinal pago' : 'Pago',
-        createdAt: new Date().toISOString()
-      });
-
-      closeModal();
-      cart = [];
-      DataStore.saveCart(cart);
-      toast('Pedido enviado pra Fernanda!');
-      render();
+      try {
+        const orderId = 'F-' + Date.now().toString(36).toUpperCase();
+        await DataStore.saveOrder({
+          id: orderId,
+          customer: name,
+          phone,
+          city: '',
+          items: cLines.reduce((s, l) => s + l.qty, 0),
+          total,
+          paid: payNow,
+          kind: hasPreorder ? 'preorder' : 'stock',
+          status: hasPreorder && payment === 'partial' ? 'Sinal pago' : 'Pago',
+          createdAt: new Date().toISOString()
+        });
+        closeModal();
+        cart = [];
+        DataStore.saveCart(cart);
+        localStorage.removeItem('fpa.cartTime');
+        toast('Pedido enviado pra Fernanda!');
+        render();
+      } catch (err) {
+        console.error('order save error:', err);
+        closeModal();
+        toast('Pedido enviado pelo WhatsApp, mas houve um erro ao registrar. Fale com a Fernanda.');
+      }
     });
   }
 
@@ -862,7 +874,7 @@ const App = (() => {
         else if (action === 'logout-customer') { customer = null; localStorage.removeItem(STORAGE_KEYS.customer); toast('Sess\u00e3o encerrada'); render(); }
         else if (action === 'close-modal') closeModal();
         else if (action === 'dismiss-promo') { promoBannerDismissed = true; sessionStorage.setItem('fpa.promoDismiss','1'); render(); }
-        else if (action === 'contact') { window.open(WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : 'https://wa.me/', '_blank'); }
+        else if (action === 'contact') { const wn = whatsappNumber(); window.open(wn ? `https://wa.me/${wn}` : 'https://wa.me/', '_blank'); }
         return;
       }
       if (filterEl) { activeFilter = filterEl.dataset.filter; render(); return; }
@@ -941,7 +953,8 @@ const App = (() => {
       document.body.appendChild(host);
     }
 
-    const types = ['sale', 'sale', 'impact', 'sale', 'cta', 'impact'];
+    const showImpact = cfg('impact_phrases', true);
+    const types = showImpact ? ['sale', 'sale', 'impact', 'sale', 'cta', 'impact'] : ['sale', 'sale', 'sale', 'cta', 'sale', 'cta'];
     const type = types[spIndex % types.length];
     spIndex++;
 
@@ -1027,20 +1040,66 @@ const App = (() => {
     });
   }
 
+  // ---------- WELCOME DISCOUNT MODAL ----------
+  function showWelcomeDiscount() {
+    if (!cfg('welcome_discount', false)) return;
+    if (localStorage.getItem('fpa.welcomeShown') === '1') return;
+    localStorage.setItem('fpa.welcomeShown', '1');
+    const code = cfg('welcome_code', 'BEMVINDA');
+    const pct = cfg('welcome_pct', 10);
+    const host = document.getElementById('modal-host');
+    host.innerHTML = `
+      <div class="modal-backdrop open" id="modal-backdrop">
+        <div class="modal" style="text-align:center;max-width:400px">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">${Icons.spark || ''}</div>
+          <h3 style="font-size:var(--fs-2xl);font-family:var(--font-serif)">Bem-vinda!</h3>
+          <p class="text-md mt-4" style="font-size:var(--fs-sm)">Primeira vez aqui? Ganhe <strong style="color:var(--color-gold)">${pct}% de desconto</strong> na sua primeira compra.</p>
+          <div class="card mt-5" style="padding:var(--sp-5);border-color:var(--color-gold);text-align:center">
+            <span class="eyebrow">Seu cupom</span>
+            <div style="font-family:var(--font-serif);font-size:var(--fs-2xl);color:var(--color-gold);margin-top:var(--sp-2);letter-spacing:var(--tracking-wider)">${code}</div>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg mt-6" data-action="close-modal">Explorar cole\u00e7\u00e3o</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ---------- CART RECOVERY CTA ----------
+  function checkCartRecovery() {
+    if (!cfg('cart_recovery', true)) return;
+    if (!cart.length) return;
+    const lastUpdate = localStorage.getItem('fpa.cartTime');
+    if (!lastUpdate) { localStorage.setItem('fpa.cartTime', Date.now().toString()); return; }
+    const hours = (Date.now() - parseInt(lastUpdate, 10)) / 3600000;
+    const threshold = cfg('cart_recovery_hours', 1);
+    if (hours >= threshold && !sessionStorage.getItem('fpa.cartRecoveryShown')) {
+      sessionStorage.setItem('fpa.cartRecoveryShown', '1');
+      setTimeout(() => {
+        toast('Seus perfumes est\u00e3o esperando na sacola! Finalize agora.');
+      }, 3000);
+    }
+  }
+
   async function init() {
     bindEvents();
     render(); // show loading state
     hideSplash();
 
     // Load data from Supabase
-    [products, promos] = await Promise.all([
+    [products, promos, settings] = await Promise.all([
       DataStore.products(),
-      DataStore.promos()
+      DataStore.promos(),
+      DataStore.settings()
     ]);
     loading = false;
     render();
-    startSocialProof();
-    initAutoCarousels();
+    if (cfg('social_proof', true)) startSocialProof();
+    if (cfg('auto_carousel', true)) initAutoCarousels();
+
+    // Welcome discount after 3s for new visitors
+    setTimeout(showWelcomeDiscount, 3000);
+    // Cart recovery check
+    checkCartRecovery();
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js').catch(() => {});

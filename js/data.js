@@ -18,7 +18,7 @@ function dbToProduct(r) {
     notes: { top: r.notes_top || '', heart: r.notes_heart || '', base: r.notes_base || '' },
     price: parseFloat(r.price), oldPrice: r.old_price ? parseFloat(r.old_price) : null,
     rating: parseFloat(r.rating), reviews: r.reviews, stock: r.stock,
-    kind: r.kind, preorderDays: r.preorder_days, depositPct: r.deposit_pct,
+    kind: r.kind, preorderDays: r.preorder_days || 14, depositPct: r.deposit_pct || 50,
     tags: r.tags || [], description: r.description || '',
     color: r.color || '#4B2E24', accent: r.accent || '#C8A96B',
     imageUrl: r.image_url || null
@@ -41,7 +41,7 @@ function productToDb(p) {
 function dbToOrder(r) {
   return {
     id: r.id, customer: r.customer, phone: r.phone, city: r.city || '',
-    items: r.items, total: parseFloat(r.total), paid: parseFloat(r.paid),
+    items: r.items, total: parseFloat(r.total) || 0, paid: parseFloat(r.paid) || 0,
     kind: r.kind, status: r.status, createdAt: r.created_at
   };
 }
@@ -160,6 +160,17 @@ const DataStore = {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.customer) || 'null'); } catch (_) { return null; }
   },
   saveCustomer(c) { localStorage.setItem(STORAGE_KEYS.customer, JSON.stringify(c)); },
+
+  // --- Settings (Supabase) ---
+  async settings() {
+    const { data, error } = await sb.from('fp_settings').select('data').eq('id', 'main').single();
+    if (error) { console.error('fp_settings fetch:', error); return {}; }
+    return data?.data || {};
+  },
+  async saveSettings(s) {
+    const { error } = await sb.from('fp_settings').upsert({ id: 'main', data: s, updated_at: new Date().toISOString() }, { onConflict: 'id' });
+    if (error) console.error('fp_settings upsert:', error);
+  },
 
   // --- Admin auth (Supabase RPC) ---
   async verifyAdmin(password) {

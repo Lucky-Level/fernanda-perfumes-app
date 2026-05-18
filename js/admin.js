@@ -6,10 +6,25 @@ const Admin = (() => {
   let products = [];
   let orders = [];
   let promos = [];
+  let settings = {};
   let view = 'dashboard';
   let editing = null;
   let editingPromo = null;
   let loading = true;
+
+  const DEFAULT_SETTINGS = {
+    social_proof: true,
+    auto_carousel: true,
+    urgency_badges: true,
+    urgency_threshold: 12,
+    impact_phrases: true,
+    welcome_discount: false,
+    welcome_code: 'BEMVINDA',
+    welcome_pct: 10,
+    cart_recovery: true,
+    cart_recovery_hours: 1,
+    whatsapp_number: ''
+  };
 
   function isAuthed() { return localStorage.getItem(STORAGE_KEYS.admin) === '1'; }
   async function login(u, p) {
@@ -434,7 +449,7 @@ const Admin = (() => {
                   <td>${BRL(o.total)}</td>
                   <td style="color:${(o.paid||0) >= o.total ? 'var(--color-success)' : 'var(--color-warning)'}">${BRL(o.paid || 0)}</td>
                   <td>
-                    <select class="select" style="height:32px;padding:0 var(--sp-3);font-size:var(--fs-xs);min-width:120px" data-action="status" data-id="${o.id}">
+                    <select class="select" style="height:44px;padding:0 var(--sp-3);font-size:16px;min-width:120px" data-action="status" data-id="${o.id}">
                       ${['Pago', 'Sinal pago', 'Em separa\u00e7\u00e3o', 'Aguardando saldo', 'Enviado', 'Entregue'].map(s => `<option ${o.status===s?'selected':''} value="${s}">${s}</option>`).join('')}
                     </select>
                   </td>
@@ -571,10 +586,10 @@ const Admin = (() => {
       active
     };
 
-    if (active) {
-      await DataStore.setPromoActive(data.id, false);
-    }
     await DataStore.savePromo(data);
+    if (active) {
+      await DataStore.setPromoActive(data.id, true);
+    }
     promos = await DataStore.promos();
     toast(editingPromo ? 'Promo\u00e7\u00e3o atualizada' : 'Promo\u00e7\u00e3o criada');
     closeModal();
@@ -590,10 +605,161 @@ const Admin = (() => {
 
   async function deletePromo(id) {
     if (!confirm('Excluir esta promo\u00e7\u00e3o?')) return;
-    await DataStore.deletePromo(id);
-    promos = await DataStore.promos();
-    toast('Promo\u00e7\u00e3o removida');
-    render();
+    try {
+      await DataStore.deletePromo(id);
+      promos = await DataStore.promos();
+      toast('Promo\u00e7\u00e3o removida');
+      render();
+    } catch (e) {
+      console.error('deletePromo error:', e);
+      toast('Erro ao excluir promo\u00e7\u00e3o');
+    }
+  }
+
+  // ---------- SETTINGS ----------
+  function renderSettings() {
+    if (loading) return renderLoading();
+    const s = { ...DEFAULT_SETTINGS, ...settings };
+    return `
+      <section class="section">
+        <span class="eyebrow">Configura\u00e7\u00f5es</span>
+        <h2 class="mt-4">T\u00e1ticas de <em>vendas</em></h2>
+        <p class="text-md mt-3" style="font-size:var(--fs-sm)">Ative ou desative cada recurso da loja. As altera\u00e7\u00f5es s\u00e3o aplicadas em tempo real.</p>
+
+        <form id="settings-form" class="grid mt-6" style="gap:var(--sp-4)">
+
+          <div class="card" style="padding:var(--sp-6)">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">Prova social (notifica\u00e7\u00f5es)</h3>
+                <p class="text-lo mt-2" style="font-size:var(--fs-xs)">Exibe notifica\u00e7\u00f5es simuladas de compras recentes: "Amanda de S\u00e3o Paulo comprou Raghba h\u00e1 12 min". Cria senso de movimento na loja.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="social_proof" ${s.social_proof ? 'checked' : ''}>
+                <span class="track"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="card" style="padding:var(--sp-6)">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">Frases de impacto</h3>
+                <p class="text-lo mt-2" style="font-size:var(--fs-xs)">Mostra frases sobre os perfumes carros-chefe Lattafa nas notifica\u00e7\u00f5es: "Lattafa Raghba \u2014 o perfume \u00e1rabe mais vendido do mundo". Refor\u00e7a a autoridade da marca.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="impact_phrases" ${s.impact_phrases ? 'checked' : ''}>
+                <span class="track"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="card" style="padding:var(--sp-6)">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">Carrossel autom\u00e1tico</h3>
+                <p class="text-lo mt-2" style="font-size:var(--fs-xs)">Os perfumes na se\u00e7\u00e3o "Mais desejados" se movem sozinhos como uma esteira, dando sensa\u00e7\u00e3o de loja viva.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="auto_carousel" ${s.auto_carousel ? 'checked' : ''}>
+                <span class="track"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="card" style="padding:var(--sp-6)">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">Badges de urg\u00eancia</h3>
+                <p class="text-lo mt-2" style="font-size:var(--fs-xs)">Exibe "Apenas X unidades!" nos perfumes com estoque baixo. Cria urg\u00eancia e acelera a decis\u00e3o de compra.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="urgency_badges" ${s.urgency_badges ? 'checked' : ''}>
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="field mt-4" style="${s.urgency_badges ? '' : 'opacity:0.4'}">
+              <label>Limite de estoque para exibir</label>
+              <input class="input" name="urgency_threshold" type="number" min="1" max="50" value="${s.urgency_threshold}" style="max-width:120px">
+            </div>
+          </div>
+
+          <div class="card" style="padding:var(--sp-6)">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">Cupom de boas-vindas</h3>
+                <p class="text-lo mt-2" style="font-size:var(--fs-xs)">Exibe automaticamente um modal com cupom de desconto para visitantes novos (primeira vez na loja). Converte visitantes em compradores.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="welcome_discount" ${s.welcome_discount ? 'checked' : ''}>
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="grid grid-2-mobile mt-4" style="${s.welcome_discount ? '' : 'opacity:0.4'}">
+              <div class="field">
+                <label>C\u00f3digo do cupom</label>
+                <input class="input" name="welcome_code" value="${s.welcome_code}" placeholder="BEMVINDA" style="text-transform:uppercase">
+              </div>
+              <div class="field">
+                <label>Desconto (%)</label>
+                <input class="input" name="welcome_pct" type="number" min="1" max="50" value="${s.welcome_pct}">
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:var(--sp-6)">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">Recupera\u00e7\u00e3o de carrinho</h3>
+                <p class="text-lo mt-2" style="font-size:var(--fs-xs)">Se o cliente tem itens no carrinho h\u00e1 mais de X horas, exibe um CTA forte incentivando a finalizar. Reduz abandono de carrinho.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="cart_recovery" ${s.cart_recovery ? 'checked' : ''}>
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="field mt-4" style="${s.cart_recovery ? '' : 'opacity:0.4'}">
+              <label>Horas at\u00e9 ativar o lembrete</label>
+              <input class="input" name="cart_recovery_hours" type="number" min="1" max="72" value="${s.cart_recovery_hours}" style="max-width:120px">
+            </div>
+          </div>
+
+          <div class="card" style="padding:var(--sp-6)">
+            <h3 style="font-size:var(--fs-lg);font-family:var(--font-serif)">N\u00famero do WhatsApp</h3>
+            <p class="text-lo mt-2" style="font-size:var(--fs-xs)">N\u00famero com c\u00f3digo do pa\u00eds para o bot\u00e3o de WhatsApp e checkout. Ex: 5581999999999</p>
+            <div class="field mt-4">
+              <input class="input" name="whatsapp_number" value="${s.whatsapp_number || ''}" placeholder="5581999999999" inputmode="numeric">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Salvar configura\u00e7\u00f5es</button>
+        </form>
+      </section>
+    `;
+  }
+
+  function bindSettingsForm() {
+    const form = document.getElementById('settings-form');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      settings = {
+        social_proof: fd.get('social_proof') === 'on',
+        auto_carousel: fd.get('auto_carousel') === 'on',
+        urgency_badges: fd.get('urgency_badges') === 'on',
+        urgency_threshold: parseInt(fd.get('urgency_threshold') || '12', 10),
+        impact_phrases: fd.get('impact_phrases') === 'on',
+        welcome_discount: fd.get('welcome_discount') === 'on',
+        welcome_code: (fd.get('welcome_code') || 'BEMVINDA').trim().toUpperCase(),
+        welcome_pct: parseInt(fd.get('welcome_pct') || '10', 10),
+        cart_recovery: fd.get('cart_recovery') === 'on',
+        cart_recovery_hours: parseInt(fd.get('cart_recovery_hours') || '1', 10),
+        whatsapp_number: (fd.get('whatsapp_number') || '').replace(/\D/g, '')
+      };
+      await DataStore.saveSettings(settings);
+      toast('Configura\u00e7\u00f5es salvas');
+    });
   }
 
   // ---------- LAYOUT ----------
@@ -603,6 +769,7 @@ const Admin = (() => {
     else if (view === 'products') body = renderProducts();
     else if (view === 'orders') body = renderOrders();
     else if (view === 'promos') body = renderPromos();
+    else if (view === 'settings') body = renderSettings();
 
     return `
       <header class="header">
@@ -632,7 +799,10 @@ const Admin = (() => {
           <span class="icon">${Icons.package}</span><span class="label">Pedidos</span>
         </button>
         <button class="item ${view==='promos'?'active':''}" data-view="promos">
-          <span class="icon">${Icons.spark || Icons.star}</span><span class="label">Promo\u00e7\u00f5es</span>
+          <span class="icon">${Icons.spark || Icons.star}</span><span class="label">Promo</span>
+        </button>
+        <button class="item ${view==='settings'?'active':''}" data-view="settings">
+          <span class="icon">${Icons.filter}</span><span class="label">Config</span>
         </button>
       </nav>
 
@@ -673,15 +843,18 @@ const Admin = (() => {
         else { input.type = 'password'; btn.innerHTML = Icons.eye; }
       });
     });
+
+    if (view === 'settings') bindSettingsForm();
   }
 
   async function loadData() {
     loading = true;
     render();
-    [products, orders, promos] = await Promise.all([
+    [products, orders, promos, settings] = await Promise.all([
       DataStore.products(),
       DataStore.orders(),
-      DataStore.promos()
+      DataStore.promos(),
+      DataStore.settings()
     ]);
     loading = false;
   }

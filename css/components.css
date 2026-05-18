@@ -222,8 +222,8 @@
   display: flex; flex-direction: column; gap: 6px;
 }
 .perfume-card .fav {
-  position: absolute; top: 12px; right: 12px;
-  width: 36px; height: 36px;
+  position: absolute; top: 8px; right: 8px;
+  width: 44px; height: 44px;
   border-radius: var(--r-pill);
   background: var(--glass-bg-strong);
   display: inline-flex; align-items: center; justify-content: center;
@@ -365,7 +365,7 @@
   letter-spacing: var(--tracking-wider);
 }
 .promo-strip__close {
-  width: 28px; height: 28px;
+  width: 44px; height: 44px;
   display: inline-flex; align-items: center; justify-content: center;
   color: var(--color-text-md);
   border-radius: var(--r-pill);
@@ -951,7 +951,8 @@
 /* Grid helpers */
 .grid { display: grid; gap: var(--sp-4); }
 @media (min-width: 600px) { .grid { gap: var(--sp-5); } }
-.grid-products { grid-template-columns: repeat(2, 1fr); }
+.grid-products { grid-template-columns: 1fr; }
+@media (min-width: 400px) { .grid-products { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 600px) { .grid-products { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
 
 /* grid-2: always 2 columns on desktop, 1 column on mobile */
@@ -962,7 +963,8 @@
 .grid-2-mobile { grid-template-columns: 1fr; }
 @media (min-width: 400px) { .grid-2-mobile { grid-template-columns: repeat(2, 1fr); } }
 
-.grid-3 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: 1fr; }
+@media (min-width: 400px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 700px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
 
 @media (min-width: 900px) {
