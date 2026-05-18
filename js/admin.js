@@ -13,7 +13,6 @@ const Admin = (() => {
 
   function isAuthed() { return localStorage.getItem(STORAGE_KEYS.admin) === '1'; }
   async function login(u, p) {
-    // username check is client-side, password verified via Supabase RPC
     if (u.trim() !== 'fernandasousa') return false;
     const ok = await DataStore.verifyAdmin(p);
     if (ok) localStorage.setItem(STORAGE_KEYS.admin, '1');
@@ -38,14 +37,14 @@ const Admin = (() => {
         <div class="card rise-in" style="padding:var(--sp-8); max-width:440px; width:100%">
           <div style="text-align:center; margin-bottom:var(--sp-6)">
             <img src="./icons/icon.svg" alt="Fernanda" width="96" height="96" style="margin:0 auto var(--sp-4); display:block">
-            <span class="eyebrow">Area restrita</span>
+            <span class="eyebrow">\u00c1rea restrita</span>
             <h2 class="mt-4" style="font-size:var(--fs-2xl)">Painel <em>Fernanda</em></h2>
             <p class="text-lo mt-4" style="font-size:var(--fs-sm)">Acesso exclusivo da equipe</p>
           </div>
           <form id="login-form" class="flex flex-col gap-4">
             <div class="field">
-              <label>Usuario</label>
-              <input class="input" name="user" placeholder="seu usuario" autocomplete="username" required />
+              <label>Usu\u00e1rio</label>
+              <input class="input" name="user" placeholder="seu usu\u00e1rio" autocomplete="username" required />
             </div>
             <div class="field">
               <label>Senha</label>
@@ -56,7 +55,7 @@ const Admin = (() => {
               <span class="hint">Acesso restrito . equipe Fernanda</span>
             </div>
             <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" id="login-btn">Entrar</button>
-            <a href="./index.html" class="btn btn-secondary btn-block">Voltar a loja</a>
+            <a href="./index.html" class="btn btn-secondary btn-block">Voltar \u00e0 loja</a>
           </form>
         </div>
       </section>
@@ -74,7 +73,7 @@ const Admin = (() => {
 
     return `
       <section class="section">
-        <span class="eyebrow">Visao geral</span>
+        <span class="eyebrow">Vis\u00e3o geral</span>
         <h2 class="mt-4">Boa tarde, <em>Fernanda</em></h2>
         <p class="text-md mt-4">Resumo de hoje . ${new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
 
@@ -87,7 +86,7 @@ const Admin = (() => {
           <div class="stat">
             <div class="k">Pedidos abertos</div>
             <div class="v">${pending.length}</div>
-            <div class="delta">${pending.length} aguardando acao</div>
+            <div class="delta">${pending.length} aguardando a\u00e7\u00e3o</div>
           </div>
           <div class="stat">
             <div class="k">Encomendas ativas</div>
@@ -100,12 +99,12 @@ const Admin = (() => {
             <div class="delta ${lowStock.length ? 'down' : ''}">${lowStock.length} com estoque baixo</div>
           </div>
           <div class="stat">
-            <div class="k">Promocoes ativas</div>
+            <div class="k">Promo\u00e7\u00f5es ativas</div>
             <div class="v">${activePromos}</div>
             <div class="delta">${promos.length} cadastradas no total</div>
           </div>
           <div class="stat">
-            <div class="k">Ticket medio</div>
+            <div class="k">Ticket m\u00e9dio</div>
             <div class="v">${BRL(orders.reduce((s,o)=>s+o.total,0) / Math.max(orders.length, 1))}</div>
             <div class="delta">Base de ${orders.length} pedidos</div>
           </div>
@@ -114,9 +113,10 @@ const Admin = (() => {
         <div class="grid grid-2-lg mt-8">
           <div class="card" style="padding:var(--sp-6)">
             <div class="flex justify-between items-center mb-4">
-              <h3 style="font-size:var(--fs-xl)">Ultimos pedidos</h3>
+              <h3 style="font-size:var(--fs-xl)">\u00daltimos pedidos</h3>
               <button class="btn btn-secondary btn-sm" data-view="orders">Ver todos</button>
             </div>
+            <div class="table-wrap">
             <table class="table">
               <thead><tr><th>Pedido</th><th>Cliente</th><th>Tipo</th><th>Status</th></tr></thead>
               <tbody>
@@ -130,18 +130,19 @@ const Admin = (() => {
                 `).join('')}
               </tbody>
             </table>
+            </div>
           </div>
 
           <div class="card" style="padding:var(--sp-6)">
-            <h3 style="font-size:var(--fs-xl); margin-bottom:var(--sp-4)">Estoque critico</h3>
+            <h3 style="font-size:var(--fs-xl); margin-bottom:var(--sp-4)">Estoque cr\u00edtico</h3>
             ${lowStock.length ? lowStock.map(p => `
               <div class="flex items-center gap-3" style="padding:var(--sp-3) 0;border-bottom:1px solid var(--color-line-soft)">
                 <div style="width:36px;height:44px;background:linear-gradient(180deg,${p.color},#0a0a0a);border-radius:6px;flex:0 0 auto;border:1px solid ${p.accent}"></div>
-                <div style="flex:1">
-                  <div style="font-family:var(--font-serif);font-size:var(--fs-md)">${p.name}</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-family:var(--font-serif);font-size:var(--fs-md);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
                   <div class="text-lo" style="font-size:var(--fs-xs)">${p.brand}</div>
                 </div>
-                <div style="color:${p.stock <= 6 ? 'var(--color-danger)' : 'var(--color-warning)'};font-weight:600;font-size:var(--fs-sm)">${p.stock} un.</div>
+                <div style="color:${p.stock <= 6 ? 'var(--color-danger)' : 'var(--color-warning)'};font-weight:600;font-size:var(--fs-sm);flex:0 0 auto">${p.stock} un.</div>
               </div>
             `).join('') : '<p class="text-lo">Tudo abastecido.</p>'}
           </div>
@@ -163,7 +164,7 @@ const Admin = (() => {
     return ({
       'Pago': 'badge-new',
       'Sinal pago': 'badge-preorder',
-      'Em separacao': 'badge-exclusive',
+      'Em separa\u00e7\u00e3o': 'badge-exclusive',
       'Aguardando saldo': 'badge-bestseller',
       'Enviado': 'badge-bestseller',
       'Entregue': 'badge-discount'
@@ -177,20 +178,21 @@ const Admin = (() => {
       <section class="section">
         <div class="flex items-center justify-between" style="flex-wrap:wrap;gap:var(--sp-4)">
           <div>
-            <span class="eyebrow">Catalogo</span>
+            <span class="eyebrow">Cat\u00e1logo</span>
             <h2 class="mt-4">Gerenciar <em>perfumes</em></h2>
-            <p class="text-md mt-3" style="font-size:var(--fs-sm)">Voce pode marcar um perfume como <strong style="color:var(--color-gold)">Pronta entrega</strong> (estoque) ou <strong style="color:var(--color-gold)">Encomenda</strong> (importacao sob demanda com sinal).</p>
+            <p class="text-md mt-3" style="font-size:var(--fs-sm)">Voc\u00ea pode marcar um perfume como <strong style="color:var(--color-gold)">Pronta entrega</strong> (estoque) ou <strong style="color:var(--color-gold)">Encomenda</strong> (importa\u00e7\u00e3o sob demanda com sinal).</p>
           </div>
           <button class="btn btn-primary" data-action="new-product">${Icons.plus} Adicionar perfume</button>
         </div>
 
-        <div class="card mt-6" style="padding:0;overflow-x:auto">
+        <div class="card mt-6" style="padding:0;overflow:hidden">
+          <div class="table-wrap">
           <table class="table">
-            <thead><tr><th></th><th>Nome</th><th>Tipo</th><th>Familia</th><th>Preco</th><th>Estoque/Prazo</th><th></th></tr></thead>
+            <thead><tr><th></th><th>Nome</th><th>Tipo</th><th>Fam\u00edlia</th><th>Pre\u00e7o</th><th>Estoque/Prazo</th><th></th></tr></thead>
             <tbody>
               ${products.map(p => `
                 <tr>
-                  <td style="width:60px"><div style="width:32px;height:40px;background:linear-gradient(180deg,${p.color},#0a0a0a);border:1px solid ${p.accent};border-radius:5px"></div></td>
+                  <td style="width:48px"><div style="width:32px;height:40px;background:linear-gradient(180deg,${p.color},#0a0a0a);border:1px solid ${p.accent};border-radius:5px"></div></td>
                   <td>
                     <div style="font-family:var(--font-serif);font-size:var(--fs-md)">${p.name}</div>
                     <div class="text-lo" style="font-size:var(--fs-xs)">${p.brand}</div>
@@ -203,7 +205,7 @@ const Admin = (() => {
                       ? `<span class="text-md">${p.preorderDays}d . ${p.depositPct}% sinal</span>`
                       : `<span style="color:${p.stock<=6?'var(--color-danger)':p.stock<=12?'var(--color-warning)':'var(--color-text-md)'}">${p.stock} un.</span>`}
                   </td>
-                  <td style="width:120px;text-align:right">
+                  <td style="width:100px;text-align:right;white-space:nowrap">
                     <button class="btn-icon" style="width:36px;height:36px" data-action="edit-product" data-id="${p.id}" aria-label="Editar">${Icons.edit}</button>
                     <button class="btn-icon" style="width:36px;height:36px" data-action="delete-product" data-id="${p.id}" aria-label="Excluir">${Icons.trash}</button>
                   </td>
@@ -211,6 +213,7 @@ const Admin = (() => {
               `).join('')}
             </tbody>
           </table>
+          </div>
         </div>
       </section>
     `;
@@ -229,7 +232,7 @@ const Admin = (() => {
     };
     return `
       <div class="modal-backdrop open" id="modal-backdrop">
-        <div class="modal" style="max-width:680px;max-height:90vh;overflow-y:auto">
+        <div class="modal modal-full" style="max-width:680px;max-height:90vh;overflow-y:auto">
           <div class="flex justify-between items-center mb-4">
             <h3 style="font-size:var(--fs-xl)">${isNew ? 'Novo perfume' : 'Editar perfume'}</h3>
             <button class="btn-icon" data-action="close-modal" style="width:36px;height:36px">${Icons.close}</button>
@@ -240,49 +243,49 @@ const Admin = (() => {
             <div class="card" style="padding:var(--sp-5)">
               <span class="eyebrow">Tipo de produto</span>
               <div class="flex gap-3 mt-3" style="flex-wrap:wrap">
-                <label class="pay-option" style="flex:1;min-width:220px">
+                <label class="pay-option" style="flex:1;min-width:140px">
                   <input type="radio" name="kind" value="stock" ${v.kind === 'stock' ? 'checked' : ''}>
                   <div>
                     <strong>Pronta entrega</strong>
-                    <div class="text-lo" style="font-size:var(--fs-xs)">Tenho em estoque . envio rapido</div>
+                    <div class="text-lo" style="font-size:var(--fs-xs)">Tenho em estoque . envio r\u00e1pido</div>
                   </div>
                 </label>
-                <label class="pay-option" style="flex:1;min-width:220px">
+                <label class="pay-option" style="flex:1;min-width:140px">
                   <input type="radio" name="kind" value="preorder" ${v.kind === 'preorder' ? 'checked' : ''}>
                   <div>
                     <strong>Encomenda</strong>
-                    <div class="text-lo" style="font-size:var(--fs-xs)">Importacao sob medida . com sinal</div>
+                    <div class="text-lo" style="font-size:var(--fs-xs)">Importa\u00e7\u00e3o sob medida . com sinal</div>
                   </div>
                 </label>
               </div>
             </div>
 
-            <div class="grid grid-2">
+            <div class="grid grid-2-mobile">
               <div class="field"><label>Nome</label><input class="input" name="name" required value="${v.name}"></div>
               <div class="field"><label>Marca</label><input class="input" name="brand" required value="${v.brand}"></div>
             </div>
-            <div class="field"><label>Familia olfativa</label><input class="input" name="family" value="${v.family}"></div>
-            <div class="grid grid-2">
-              <div class="field"><label>Preco (R$)</label><input class="input" name="price" type="number" step="0.01" required value="${v.price}"></div>
-              <div class="field"><label>Preco cheio (R$)</label><input class="input" name="oldPrice" type="number" step="0.01" value="${v.oldPrice || ''}"></div>
+            <div class="field"><label>Fam\u00edlia olfativa</label><input class="input" name="family" value="${v.family}"></div>
+            <div class="grid grid-2-mobile">
+              <div class="field"><label>Pre\u00e7o (R$)</label><input class="input" name="price" type="number" step="0.01" required value="${v.price}"></div>
+              <div class="field"><label>Pre\u00e7o cheio (R$)</label><input class="input" name="oldPrice" type="number" step="0.01" value="${v.oldPrice || ''}"></div>
             </div>
 
-            <div class="grid grid-2" id="stock-fields" style="${v.kind === 'stock' ? '' : 'display:none'}">
+            <div class="grid grid-2-mobile" id="stock-fields" style="${v.kind === 'stock' ? '' : 'display:none'}">
               <div class="field"><label>Estoque (unidades)</label><input class="input" name="stock" type="number" min="0" value="${v.stock}"></div>
-              <div class="field"><label>Tags (virgula)</label><input class="input" name="tags" value="${v.tags.join(', ')}" placeholder="bestseller, exclusive, new"></div>
+              <div class="field"><label>Tags (v\u00edrgula)</label><input class="input" name="tags" value="${v.tags.join(', ')}" placeholder="bestseller, exclusive, new"></div>
             </div>
-            <div class="grid grid-2" id="preorder-fields" style="${v.kind === 'preorder' ? '' : 'display:none'}">
+            <div class="grid grid-2-mobile" id="preorder-fields" style="${v.kind === 'preorder' ? '' : 'display:none'}">
               <div class="field"><label>Prazo de chegada (dias)</label><input class="input" name="preorderDays" type="number" min="1" value="${v.preorderDays}"></div>
-              <div class="field"><label>Sinal minimo (%)</label><input class="input" name="depositPct" type="number" min="10" max="100" value="${v.depositPct}"></div>
+              <div class="field"><label>Sinal m\u00ednimo (%)</label><input class="input" name="depositPct" type="number" min="10" max="100" value="${v.depositPct}"></div>
             </div>
             <div class="field" id="preorder-tags" style="${v.kind === 'preorder' ? '' : 'display:none'}">
-              <label>Tags (virgula)</label>
+              <label>Tags (v\u00edrgula)</label>
               <input class="input" name="tags2" value="${v.tags.join(', ')}" placeholder="exclusive, new">
             </div>
 
             <div class="card" style="padding:var(--sp-5)">
               <span class="eyebrow">Imagem do produto</span>
-              <p class="text-lo mt-3" style="font-size:var(--fs-xs)">Suba uma foto real do perfume. Se nao tiver, o frasco SVG sera usado.</p>
+              <p class="text-lo mt-3" style="font-size:var(--fs-xs)">Suba uma foto real do perfume. Se n\u00e3o tiver, o frasco SVG ser\u00e1 usado.</p>
               <div class="mt-3">
                 ${v.imageUrl ? `<div id="img-preview" style="margin-bottom:var(--sp-3)"><img src="${v.imageUrl}" style="width:120px;height:auto;border-radius:var(--r-lg);border:1px solid var(--color-line-soft)"></div>` : '<div id="img-preview"></div>'}
                 <input type="file" name="image" accept="image/*" id="product-image-input" style="font-size:var(--fs-sm)">
@@ -290,14 +293,14 @@ const Admin = (() => {
               </div>
             </div>
 
-            <div class="grid grid-2">
+            <div class="grid grid-2-mobile">
               <div class="field"><label>Cor do frasco</label><div class="flex gap-3 items-center"><input type="color" name="color" value="${v.color}" style="width:48px;height:40px;border:none;background:none;cursor:pointer;padding:0"><span class="text-lo" style="font-size:var(--fs-xs)" id="color-hex">${v.color}</span></div></div>
               <div class="field"><label>Cor do detalhe</label><div class="flex gap-3 items-center"><input type="color" name="accent" value="${v.accent}" style="width:48px;height:40px;border:none;background:none;cursor:pointer;padding:0"><span class="text-lo" style="font-size:var(--fs-xs)" id="accent-hex">${v.accent}</span></div></div>
             </div>
-            <div class="field"><label>Notas de saida</label><input class="input" name="top" value="${v.notes.top}"></div>
-            <div class="field"><label>Notas de coracao</label><input class="input" name="heart" value="${v.notes.heart}"></div>
+            <div class="field"><label>Notas de sa\u00edda</label><input class="input" name="top" value="${v.notes.top}"></div>
+            <div class="field"><label>Notas de cora\u00e7\u00e3o</label><input class="input" name="heart" value="${v.notes.heart}"></div>
             <div class="field"><label>Notas de fundo</label><input class="input" name="base" value="${v.notes.base}"></div>
-            <div class="field"><label>Descricao</label><textarea class="textarea" name="description">${v.description}</textarea></div>
+            <div class="field"><label>Descri\u00e7\u00e3o</label><textarea class="textarea" name="description">${v.description}</textarea></div>
 
             <div class="flex gap-3 mt-4">
               <button type="button" class="btn btn-secondary btn-block" data-action="close-modal">Cancelar</button>
@@ -323,13 +326,11 @@ const Admin = (() => {
     }
     form.querySelectorAll('input[name="kind"]').forEach(r => r.addEventListener('change', refreshKind));
 
-    // Color picker live hex display
     const colorInput = form.elements['color'];
     const accentInput = form.elements['accent'];
     if (colorInput) colorInput.addEventListener('input', () => { document.getElementById('color-hex').textContent = colorInput.value; });
     if (accentInput) accentInput.addEventListener('input', () => { document.getElementById('accent-hex').textContent = accentInput.value; });
 
-    // Image preview
     const imgInput = document.getElementById('product-image-input');
     if (imgInput) {
       imgInput.addEventListener('change', () => {
@@ -360,7 +361,6 @@ const Admin = (() => {
       .split(',').map(s => s.trim()).filter(Boolean);
     const productId = f.get('id') || 'p-' + Math.random().toString(36).slice(2, 7);
 
-    // Upload image if selected
     let imageUrl = f.get('imageUrl') || null;
     const imageFile = document.getElementById('product-image-input').files[0];
     if (imageFile) {
@@ -420,7 +420,8 @@ const Admin = (() => {
         <span class="eyebrow">Vendas</span>
         <h2 class="mt-4">Todos os <em>pedidos</em></h2>
 
-        <div class="card mt-6" style="padding:0;overflow-x:auto">
+        <div class="card mt-6" style="padding:0;overflow:hidden">
+          <div class="table-wrap">
           <table class="table">
             <thead><tr><th>Pedido</th><th>Cliente</th><th>Telefone</th><th>Tipo</th><th>Total</th><th>Pago</th><th>Status</th><th>Data</th></tr></thead>
             <tbody>
@@ -433,15 +434,16 @@ const Admin = (() => {
                   <td>${BRL(o.total)}</td>
                   <td style="color:${(o.paid||0) >= o.total ? 'var(--color-success)' : 'var(--color-warning)'}">${BRL(o.paid || 0)}</td>
                   <td>
-                    <select class="select" style="height:32px;padding:0 var(--sp-3);font-size:var(--fs-xs)" data-action="status" data-id="${o.id}">
-                      ${['Pago', 'Sinal pago', 'Em separacao', 'Aguardando saldo', 'Enviado', 'Entregue'].map(s => `<option ${o.status===s?'selected':''} value="${s}">${s}</option>`).join('')}
+                    <select class="select" style="height:32px;padding:0 var(--sp-3);font-size:var(--fs-xs);min-width:120px" data-action="status" data-id="${o.id}">
+                      ${['Pago', 'Sinal pago', 'Em separa\u00e7\u00e3o', 'Aguardando saldo', 'Enviado', 'Entregue'].map(s => `<option ${o.status===s?'selected':''} value="${s}">${s}</option>`).join('')}
                     </select>
                   </td>
-                  <td class="text-lo" style="font-size:var(--fs-xs)">${new Date(o.createdAt).toLocaleDateString('pt-BR')}</td>
+                  <td class="text-lo" style="font-size:var(--fs-xs);white-space:nowrap">${new Date(o.createdAt).toLocaleDateString('pt-BR')}</td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
+          </div>
         </div>
       </section>
     `;
@@ -462,13 +464,13 @@ const Admin = (() => {
         <div class="flex items-center justify-between" style="flex-wrap:wrap;gap:var(--sp-4)">
           <div>
             <span class="eyebrow">Marketing</span>
-            <h2 class="mt-4">Gerenciar <em>promocoes</em></h2>
-            <p class="text-md mt-3" style="font-size:var(--fs-sm)">A promocao marcada como ativa aparece como uma faixa no topo da loja.</p>
+            <h2 class="mt-4">Gerenciar <em>promo\u00e7\u00f5es</em></h2>
+            <p class="text-md mt-3" style="font-size:var(--fs-sm)">A promo\u00e7\u00e3o marcada como ativa aparece como uma faixa no topo da loja.</p>
           </div>
-          <button class="btn btn-primary" data-action="new-promo">${Icons.plus} Nova promocao</button>
+          <button class="btn btn-primary" data-action="new-promo">${Icons.plus} Nova promo\u00e7\u00e3o</button>
         </div>
 
-        <div class="grid grid-2 mt-6">
+        <div class="grid grid-2-mobile mt-6">
           ${promos.map(pm => `
             <div class="card" style="padding:var(--sp-6); ${pm.active ? 'border-color:var(--color-gold);box-shadow:var(--sh-gold-glow)' : ''}">
               <div class="flex justify-between items-center mb-3">
@@ -479,8 +481,8 @@ const Admin = (() => {
               <p class="text-md mt-3" style="font-size:var(--fs-sm)">${pm.description}</p>
               <div class="mt-4 flex gap-4 text-md" style="font-size:var(--fs-sm); flex-wrap:wrap">
                 ${pm.discountPct ? `<span>${pm.discountPct}% OFF</span>` : ''}
-                ${pm.freeShipping ? `<span>Frete gratis</span>` : ''}
-                <span>Ate ${new Date(pm.validUntil).toLocaleDateString('pt-BR')}</span>
+                ${pm.freeShipping ? `<span>Frete gr\u00e1tis</span>` : ''}
+                <span>At\u00e9 ${new Date(pm.validUntil).toLocaleDateString('pt-BR')}</span>
               </div>
               <div class="flex gap-2 mt-5" style="flex-wrap:wrap">
                 <label class="switch">
@@ -508,27 +510,27 @@ const Admin = (() => {
     };
     return `
       <div class="modal-backdrop open">
-        <div class="modal" style="max-width:560px">
+        <div class="modal modal-full" style="max-width:560px">
           <div class="flex justify-between items-center mb-4">
-            <h3 style="font-size:var(--fs-xl)">${isNew ? 'Nova promocao' : 'Editar promocao'}</h3>
+            <h3 style="font-size:var(--fs-xl)">${isNew ? 'Nova promo\u00e7\u00e3o' : 'Editar promo\u00e7\u00e3o'}</h3>
             <button class="btn-icon" data-action="close-modal" style="width:36px;height:36px">${Icons.close}</button>
           </div>
           <form id="promo-form" class="flex flex-col gap-4">
             <input type="hidden" name="id" value="${v.id}">
-            <div class="field"><label>Titulo</label><input class="input" name="title" required value="${v.title}" placeholder="Ex: 10% OFF na primeira compra"></div>
-            <div class="field"><label>Descricao</label><textarea class="textarea" name="description">${v.description}</textarea></div>
-            <div class="grid grid-2">
-              <div class="field"><label>Cupom (codigo)</label><input class="input" name="code" required value="${v.code}" placeholder="FERNANDA10" style="text-transform:uppercase"></div>
-              <div class="field"><label>Valido ate</label><input class="input" name="validUntil" type="date" required value="${v.validUntil}"></div>
+            <div class="field"><label>T\u00edtulo</label><input class="input" name="title" required value="${v.title}" placeholder="Ex: 10% OFF na primeira compra"></div>
+            <div class="field"><label>Descri\u00e7\u00e3o</label><textarea class="textarea" name="description">${v.description}</textarea></div>
+            <div class="grid grid-2-mobile">
+              <div class="field"><label>Cupom (c\u00f3digo)</label><input class="input" name="code" required value="${v.code}" placeholder="FERNANDA10" style="text-transform:uppercase"></div>
+              <div class="field"><label>V\u00e1lido at\u00e9</label><input class="input" name="validUntil" type="date" required value="${v.validUntil}"></div>
             </div>
-            <div class="grid grid-2">
+            <div class="grid grid-2-mobile">
               <div class="field"><label>Desconto (%)</label><input class="input" name="discountPct" type="number" min="0" max="80" value="${v.discountPct}"></div>
               <div class="field">
-                <label>Beneficios extras</label>
+                <label>Benef\u00edcios extras</label>
                 <label class="switch" style="margin-top:6px">
                   <input type="checkbox" name="freeShipping" ${v.freeShipping ? 'checked' : ''}>
                   <span class="track"></span>
-                  <span style="font-size:var(--fs-xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--color-text-md)">Frete gratis</span>
+                  <span style="font-size:var(--fs-xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--color-text-md)">Frete gr\u00e1tis</span>
                 </label>
               </div>
             </div>
@@ -570,11 +572,11 @@ const Admin = (() => {
     };
 
     if (active) {
-      await DataStore.setPromoActive(data.id, false); // deactivate all first
+      await DataStore.setPromoActive(data.id, false);
     }
     await DataStore.savePromo(data);
     promos = await DataStore.promos();
-    toast(editingPromo ? 'Promocao atualizada' : 'Promocao criada');
+    toast(editingPromo ? 'Promo\u00e7\u00e3o atualizada' : 'Promo\u00e7\u00e3o criada');
     closeModal();
     render();
   }
@@ -582,15 +584,15 @@ const Admin = (() => {
   async function togglePromo(id, value) {
     await DataStore.setPromoActive(id, value);
     promos = await DataStore.promos();
-    toast(value ? 'Promocao ativada na loja' : 'Promocao desativada');
+    toast(value ? 'Promo\u00e7\u00e3o ativada na loja' : 'Promo\u00e7\u00e3o desativada');
     render();
   }
 
   async function deletePromo(id) {
-    if (!confirm('Excluir esta promocao?')) return;
+    if (!confirm('Excluir esta promo\u00e7\u00e3o?')) return;
     await DataStore.deletePromo(id);
     promos = await DataStore.promos();
-    toast('Promocao removida');
+    toast('Promo\u00e7\u00e3o removida');
     render();
   }
 
@@ -621,16 +623,16 @@ const Admin = (() => {
 
       <nav class="bottom-nav" role="tablist">
         <button class="item ${view==='dashboard'?'active':''}" data-view="dashboard">
-          <span class="icon">${Icons.dash}</span><span class="label">Visao</span>
+          <span class="icon">${Icons.dash}</span><span class="label">Vis\u00e3o</span>
         </button>
         <button class="item ${view==='products'?'active':''}" data-view="products">
-          <span class="icon">${Icons.bottle}</span><span class="label">Catalogo</span>
+          <span class="icon">${Icons.bottle}</span><span class="label">Cat\u00e1logo</span>
         </button>
         <button class="item ${view==='orders'?'active':''}" data-view="orders">
           <span class="icon">${Icons.package}</span><span class="label">Pedidos</span>
         </button>
         <button class="item ${view==='promos'?'active':''}" data-view="promos">
-          <span class="icon">${Icons.spark || Icons.star}</span><span class="label">Promocoes</span>
+          <span class="icon">${Icons.spark || Icons.star}</span><span class="label">Promo\u00e7\u00f5es</span>
         </button>
       </nav>
 
@@ -656,7 +658,7 @@ const Admin = (() => {
           await loadData();
           render();
         } else {
-          toast('Credenciais invalidas');
+          toast('Credenciais inv\u00e1lidas');
           f.querySelectorAll('.input').forEach(i => i.classList.add('error'));
           btn.textContent = 'Entrar';
           btn.disabled = false;

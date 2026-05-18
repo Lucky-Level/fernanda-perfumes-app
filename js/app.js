@@ -78,7 +78,7 @@ const App = (() => {
     if (p.kind === 'preorder') html += '<span class="badge badge-preorder">Encomenda . ' + p.preorderDays + ' dias</span>';
     else html += '<span class="badge badge-stock">Pronta entrega</span>';
     if (p.tags.includes('bestseller')) html += '<span class="badge badge-bestseller">Best Seller</span>';
-    if (p.tags.includes('exclusive')) html += '<span class="badge badge-exclusive">Arabe Exclusivo</span>';
+    if (p.tags.includes('exclusive')) html += '<span class="badge badge-exclusive">\u00c1rabe Exclusivo</span>';
     if (p.tags.includes('new')) html += '<span class="badge badge-new">Novo</span>';
     if (p.oldPrice) {
       const off = Math.round((1 - p.price / p.oldPrice) * 100);
@@ -128,7 +128,7 @@ const App = (() => {
         <span class="ic">${Icons.spark || ''}</span>
         <div class="promo-strip__text">
           <strong>${promo.title}</strong>
-          <span class="text-lo">. cupom <code>${promo.code}</code> ${promo.validUntil ? '. valido ate ' + new Date(promo.validUntil).toLocaleDateString('pt-BR') : ''}</span>
+          <span class="text-lo"> . cupom <code>${promo.code}</code> ${promo.validUntil ? ' . v\u00e1lido at\u00e9 ' + new Date(promo.validUntil).toLocaleDateString('pt-BR') : ''}</span>
         </div>
         <button class="promo-strip__close" data-action="dismiss-promo" aria-label="Fechar">${Icons.close}</button>
       </div>
@@ -140,7 +140,7 @@ const App = (() => {
     return `
       <section class="section" style="text-align:center;padding:var(--sp-10) 0">
         <div style="width:48px;height:48px;border:2px solid var(--color-gold);border-top-color:transparent;border-radius:50%;margin:0 auto;animation:spin 0.8s linear infinite"></div>
-        <p class="text-lo mt-6">Carregando catalogo...</p>
+        <p class="text-lo mt-6">Carregando cat\u00e1logo...</p>
       </section>
     `;
   }
@@ -165,11 +165,11 @@ const App = (() => {
           </g>
         </svg>
         <div class="content">
-          <span class="eyebrow">Colecao 2026 . Dubai Edition</span>
-          <h1 class="mt-4">Perfumaria arabe, <em>com a assinatura da Fernanda</em>.</h1>
-          <p class="lead">Fragancias autenticas, importadas e selecionadas para voce sentir o oriente em cada borrifo. <strong style="color:var(--color-gold)">Pronta entrega</strong> ou <strong style="color:var(--color-gold)">encomenda sob medida</strong>.</p>
+          <span class="eyebrow">Cole\u00e7\u00e3o 2026 . Dubai Edition</span>
+          <h1 class="mt-4">Perfumaria \u00e1rabe, <em>com a assinatura da Fernanda</em>.</h1>
+          <p class="lead">Fragr\u00e2ncias aut\u00eanticas, importadas e selecionadas para voc\u00ea sentir o oriente em cada borrifo. <strong style="color:var(--color-gold)">Pronta entrega</strong> ou <strong style="color:var(--color-gold)">encomenda sob medida</strong>.</p>
           <div class="ctas">
-            <button class="btn btn-primary btn-lg" data-go="catalog">Explorar colecao ${Icons.arrow}</button>
+            <button class="btn btn-primary btn-lg" data-go="catalog">Explorar cole\u00e7\u00e3o ${Icons.arrow}</button>
             <button class="btn btn-secondary btn-lg" data-go="bestsellers">Mais desejados</button>
           </div>
         </div>
@@ -196,8 +196,8 @@ const App = (() => {
             <div class="flex items-center justify-between gap-5" style="flex-wrap:wrap">
               <div>
                 <span class="eyebrow">Encomenda sob medida</span>
-                <h2 class="mt-4">Nao achou em estoque? <em>Encomende</em></h2>
-                <p class="text-md mt-4" style="max-width:560px">Reservamos seu perfume com importacao direta de Dubai. Pagamento com <strong style="color:var(--color-gold)">50% de sinal</strong> e o restante na chegada. Prazo medio de 14-21 dias.</p>
+                <h2 class="mt-4">N\u00e3o achou em estoque? <em>Encomende</em></h2>
+                <p class="text-md mt-4" style="max-width:560px">Reservamos seu perfume com importa\u00e7\u00e3o direta de Dubai. Pagamento com <strong style="color:var(--color-gold)">50% de sinal</strong> e o restante na chegada. Prazo m\u00e9dio de 14-21 dias.</p>
               </div>
               <button class="btn btn-primary" data-go="preorders">Ver encomendas</button>
             </div>
@@ -210,7 +210,7 @@ const App = (() => {
         <div class="section-head">
           <div>
             <span class="eyebrow">Sob encomenda</span>
-            <h2 class="mt-4"><em>Importacao direta</em></h2>
+            <h2 class="mt-4"><em>Importa\u00e7\u00e3o direta</em></h2>
           </div>
         </div>
         <div class="grid grid-products">
@@ -221,8 +221,8 @@ const App = (() => {
       <section class="section">
         <div class="section-head">
           <div>
-            <span class="eyebrow">Edicao Limitada</span>
-            <h2 class="mt-4"><em>Arabe Exclusivo</em></h2>
+            <span class="eyebrow">Edi\u00e7\u00e3o Limitada</span>
+            <h2 class="mt-4"><em>\u00c1rabe Exclusivo</em></h2>
           </div>
         </div>
         <div class="grid grid-products">
@@ -255,7 +255,7 @@ const App = (() => {
     return `
       ${promoBannerHTML()}
       <section class="section">
-        <span class="eyebrow">Catalogo completo</span>
+        <span class="eyebrow">Cat\u00e1logo completo</span>
         <h2 class="mt-4">Descubra sua <em>assinatura olfativa</em></h2>
 
         <div class="mt-6 flex gap-2" style="flex-wrap:wrap">
@@ -263,7 +263,7 @@ const App = (() => {
           <button class="chip ${activeFilter==='stock'?'active':''}" data-filter="stock">Pronta entrega</button>
           <button class="chip ${activeFilter==='preorder'?'active':''}" data-filter="preorder">Encomenda</button>
           <button class="chip ${activeFilter==='bestseller'?'active':''}" data-filter="bestseller">Best Sellers</button>
-          <button class="chip ${activeFilter==='exclusive'?'active':''}" data-filter="exclusive">Arabe Exclusivo</button>
+          <button class="chip ${activeFilter==='exclusive'?'active':''}" data-filter="exclusive">\u00c1rabe Exclusivo</button>
           <button class="chip ${activeFilter==='new'?'active':''}" data-filter="new">Novidades</button>
         </div>
 
@@ -302,14 +302,14 @@ const App = (() => {
 
             <div class="flex items-center gap-3 mt-4">
               ${starsHTML(p.rating)}
-              <span class="text-md" style="font-size:var(--fs-sm)">${p.rating.toFixed(1)} . ${p.reviews} avaliacoes</span>
+              <span class="text-md" style="font-size:var(--fs-sm)">${p.rating.toFixed(1)} . ${p.reviews} avalia\u00e7\u00f5es</span>
             </div>
 
             <p class="text-md mt-6" style="line-height:var(--lh-loose)">${p.description}</p>
 
             <div class="notes mt-6">
-              <div class="note"><span class="label">Saida</span><div class="value">${p.notes.top}</div></div>
-              <div class="note"><span class="label">Coracao</span><div class="value">${p.notes.heart}</div></div>
+              <div class="note"><span class="label">Sa\u00edda</span><div class="value">${p.notes.top}</div></div>
+              <div class="note"><span class="label">Cora\u00e7\u00e3o</span><div class="value">${p.notes.heart}</div></div>
               <div class="note"><span class="label">Fundo</span><div class="value">${p.notes.base}</div></div>
             </div>
 
@@ -317,10 +317,10 @@ const App = (() => {
               <div class="card mt-6" style="padding:var(--sp-5); border-color:var(--color-gold)">
                 <div class="flex gap-3 items-center" style="color:var(--color-gold)">
                   ${Icons.package}
-                  <strong>Disponivel por encomenda</strong>
+                  <strong>Dispon\u00edvel por encomenda</strong>
                 </div>
                 <p class="text-md mt-3" style="font-size:var(--fs-sm)">
-                  Importacao direta . prazo medio de <strong>${p.preorderDays} dias</strong>.<br>
+                  Importa\u00e7\u00e3o direta . prazo m\u00e9dio de <strong>${p.preorderDays} dias</strong>.<br>
                   Pague <strong>${p.depositPct}% de sinal</strong> agora (${BRL(p.price * p.depositPct / 100)}) e o restante na chegada do produto.
                 </p>
               </div>
@@ -330,7 +330,7 @@ const App = (() => {
                   ${Icons.bag}
                   <strong>Pronta entrega . ${p.stock} unidades em estoque</strong>
                 </div>
-                <p class="text-md mt-3" style="font-size:var(--fs-sm)">Envio em ate 1 dia util apos confirmacao.</p>
+                <p class="text-md mt-3" style="font-size:var(--fs-sm)">Envio em at\u00e9 1 dia \u00fatil ap\u00f3s confirma\u00e7\u00e3o.</p>
               </div>
             `}
 
@@ -338,9 +338,9 @@ const App = (() => {
               <div class="price">
                 ${p.oldPrice ? `<div class="text-lo" style="text-decoration:line-through;font-size:var(--fs-sm)">${BRL(p.oldPrice)}</div>` : ''}
                 <div style="font-family:var(--font-serif);font-size:var(--fs-3xl);color:var(--color-gold);line-height:1">${BRL(p.price)}</div>
-                <div class="text-lo" style="font-size:var(--fs-xs)">em ate 6x sem juros</div>
+                <div class="text-lo" style="font-size:var(--fs-xs)">em at\u00e9 6x sem juros</div>
               </div>
-              <div class="flex gap-3" style="flex:1;min-width:220px">
+              <div class="flex gap-3" style="flex:1;min-width:200px">
                 <button class="btn btn-primary btn-block btn-lg" data-action="add-to-cart" data-id="${p.id}">${Icons.bag} ${isPreorder ? 'Reservar encomenda' : 'Adicionar ao carrinho'}</button>
                 <button class="btn-icon" data-action="fav" data-id="${p.id}" aria-label="Favoritar">
                   ${isFav ? Icons.heartFill : Icons.heart}
@@ -354,14 +354,14 @@ const App = (() => {
         <div class="divider"></div>
 
         <div>
-          <span class="eyebrow">Avaliacoes da comunidade</span>
+          <span class="eyebrow">Avalia\u00e7\u00f5es da comunidade</span>
           <h2 class="mt-4">O que dizem nossas <em>clientes</em></h2>
 
           <div class="mt-6" style="max-width:760px">
             ${[
-              { name: 'Mariana S.', stars: 5, text: 'Chegou impecavel e o aroma e exatamente como descrito. Fixacao maravilhosa, virei cliente!', when: 'ha 3 dias' },
-              { name: 'Camila P.',  stars: 5, text: 'Embalagem premium, parece presente. Fernanda atendeu super atenciosa no WhatsApp.', when: 'ha 1 semana' },
-              { name: 'Leticia A.', stars: 4, text: 'Adorei. So achei a saida um pouco mais leve do que esperava, mas a evolucao e incrivel.', when: 'ha 2 semanas' }
+              { name: 'Mariana S.', stars: 5, text: 'Chegou impec\u00e1vel e o aroma \u00e9 exatamente como descrito. Fixa\u00e7\u00e3o maravilhosa, virei cliente!', when: 'h\u00e1 3 dias' },
+              { name: 'Camila P.',  stars: 5, text: 'Embalagem premium, parece presente. Fernanda atendeu super atenciosa no WhatsApp.', when: 'h\u00e1 1 semana' },
+              { name: 'Let\u00edcia A.', stars: 4, text: 'Adorei. S\u00f3 achei a sa\u00edda um pouco mais leve do que esperava, mas a evolu\u00e7\u00e3o \u00e9 incr\u00edvel.', when: 'h\u00e1 2 semanas' }
             ].map(r => `
               <div class="review">
                 <div class="who">
@@ -399,8 +399,8 @@ const App = (() => {
           <div style="width:64px;height:64px;margin:0 auto var(--sp-5);color:var(--color-gold)">${Icons.bag}</div>
           <span class="eyebrow">Sua sacola</span>
           <h2 class="mt-4">Ainda <em>vazia</em></h2>
-          <p class="text-md mt-4">Comece explorando nossa colecao de perfumes arabes.</p>
-          <button class="btn btn-primary mt-6" data-go="catalog">Ver colecao</button>
+          <p class="text-md mt-4">Comece explorando nossa cole\u00e7\u00e3o de perfumes \u00e1rabes.</p>
+          <button class="btn btn-primary mt-6" data-go="catalog">Ver cole\u00e7\u00e3o</button>
         </section>
       `;
     }
@@ -413,7 +413,7 @@ const App = (() => {
     return `
       <section class="section">
         <span class="eyebrow">Sua sacola</span>
-        <h2 class="mt-4">Confira sua <em>selecao</em></h2>
+        <h2 class="mt-4">Confira sua <em>sele\u00e7\u00e3o</em></h2>
 
         <div class="grid mt-6" style="gap:var(--sp-3)">
           ${lines.map(({ product: p, qty }) => `
@@ -471,11 +471,11 @@ const App = (() => {
           </div>
           ${hasPreorder ? `
             <p class="text-lo mt-4" style="font-size:var(--fs-xs)">
-              Sua sacola contem encomendas. No checkout voce podera pagar o <strong style="color:var(--color-gold)">total agora</strong> ou apenas <strong style="color:var(--color-gold)">o sinal (50%)</strong> e o restante na chegada do produto.
+              Sua sacola cont\u00e9m encomendas. No checkout voc\u00ea poder\u00e1 pagar o <strong style="color:var(--color-gold)">total agora</strong> ou apenas <strong style="color:var(--color-gold)">o sinal (50%)</strong> e o restante na chegada do produto.
             </p>
           ` : ''}
           <button class="btn btn-primary btn-block btn-lg mt-5" data-action="checkout">Finalizar pedido</button>
-          <p class="text-lo mt-4" style="text-align:center;font-size:var(--fs-xs)">Voce sera atendida diretamente pela Fernanda no WhatsApp</p>
+          <p class="text-lo mt-4" style="text-align:center;font-size:var(--fs-xs)">Voc\u00ea ser\u00e1 atendida diretamente pela Fernanda no WhatsApp</p>
         </div>
       </section>
     `;
@@ -493,7 +493,7 @@ const App = (() => {
             ${list.map(perfumeCardHTML).join('')}
           </div>
         ` : `
-          <p class="text-lo mt-6">Toque no coracao de qualquer perfume para guarda-lo aqui.</p>
+          <p class="text-lo mt-6">Toque no cora\u00e7\u00e3o de qualquer perfume para guard\u00e1-lo aqui.</p>
         `}
       </section>
     `;
@@ -505,12 +505,12 @@ const App = (() => {
     return `
       <section class="section">
         <span class="eyebrow">Conta</span>
-        <h2 class="mt-4">Bem-vinda a <em>boutique Fernanda</em></h2>
+        <h2 class="mt-4">Bem-vinda \u00e0 <em>boutique Fernanda</em></h2>
 
         <div class="grid grid-2-lg mt-6">
           <div class="card" style="padding:var(--sp-7)">
             <h3 style="font-size:var(--fs-xl)">Seus dados</h3>
-            <p class="text-md mt-3" style="font-size:var(--fs-sm)">Mantemos um cadastro minimo para agilizar suas proximas compras.</p>
+            <p class="text-md mt-3" style="font-size:var(--fs-sm)">Mantemos um cadastro m\u00ednimo para agilizar suas pr\u00f3ximas compras.</p>
             ${c.name ? `
               <div class="mt-5">
                 <div class="text-lo" style="font-size:var(--fs-xs);letter-spacing:var(--tracking-wider);text-transform:uppercase">Nome</div>
@@ -525,7 +525,7 @@ const App = (() => {
                 <button class="btn btn-dark" data-action="logout-customer">Sair</button>
               </div>
             ` : `
-              <p class="text-lo mt-4" style="font-size:var(--fs-sm)">Voce ainda nao tem dados salvos. Eles serao pedidos ao finalizar o primeiro pedido.</p>
+              <p class="text-lo mt-4" style="font-size:var(--fs-sm)">Voc\u00ea ainda n\u00e3o tem dados salvos. Eles ser\u00e3o pedidos ao finalizar o primeiro pedido.</p>
               <button class="btn btn-primary mt-5" data-action="edit-customer">Cadastrar agora</button>
             `}
           </div>
@@ -536,7 +536,7 @@ const App = (() => {
           </div>
           <div class="card" style="padding:var(--sp-7); grid-column: 1 / -1">
             <h3 style="font-size:var(--fs-xl)">Acesso administrativo</h3>
-            <p class="text-md mt-4">Area restrita para a equipe Fernanda Perfumes Arabes.</p>
+            <p class="text-md mt-4">\u00c1rea restrita para a equipe Fernanda Perfumes \u00c1rabes.</p>
             <a href="./admin.html" class="btn btn-dark mt-6" style="display:inline-flex">Entrar no painel</a>
           </div>
         </div>
@@ -563,6 +563,7 @@ const App = (() => {
     });
     updateCartBadge();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(initAutoCarousels, 50);
   }
 
   function go(view, opts = {}) {
@@ -588,7 +589,7 @@ const App = (() => {
     DataStore.saveCart(cart);
     updateCartBadge();
     const p = products.find(x => x.id === id);
-    toast(p && p.kind === 'preorder' ? 'Encomenda adicionada' : 'Adicionado a sacola');
+    toast(p && p.kind === 'preorder' ? 'Encomenda adicionada' : 'Adicionado \u00e0 sacola');
   }
   function decCart(id) {
     const item = cart.find(c => c.id === id);
@@ -620,7 +621,7 @@ const App = (() => {
     const code = input.value.trim().toUpperCase();
     const found = promos.find(p => p.active && p.code.toUpperCase() === code);
     if (found) { appliedPromo = found; toast('Cupom aplicado'); render(); }
-    else { appliedPromo = null; toast('Cupom invalido ou expirado'); render(); }
+    else { appliedPromo = null; toast('Cupom inv\u00e1lido ou expirado'); render(); }
   }
 
   // ---------- CHECKOUT MODAL ----------
@@ -647,7 +648,7 @@ const App = (() => {
             <h3 style="font-size:var(--fs-xl)">Finalizar pedido</h3>
             <button class="btn-icon" data-action="close-modal" style="width:36px;height:36px">${Icons.close}</button>
           </div>
-          <span class="eyebrow">Identificacao</span>
+          <span class="eyebrow">Identifica\u00e7\u00e3o</span>
           <p class="text-md mt-3" style="font-size:var(--fs-sm)">Para confirmarmos seu pedido, precisamos do seu nome completo e telefone com DDD.</p>
 
           <form id="checkout-form" class="flex flex-col gap-4 mt-5">
@@ -670,7 +671,7 @@ const App = (() => {
                     <input type="radio" name="payment" value="full" checked>
                     <div>
                       <strong>Pagar total agora</strong>
-                      <div class="text-lo" style="font-size:var(--fs-xs)">${BRL(total)} . agiliza a importacao</div>
+                      <div class="text-lo" style="font-size:var(--fs-xs)">${BRL(total)} . agiliza a importa\u00e7\u00e3o</div>
                     </div>
                   </label>
                   <label class="pay-option">
@@ -723,7 +724,7 @@ const App = (() => {
       }
       if (!isValidPhone(phone)) {
         form.elements['phone'].classList.add('error');
-        form.querySelector('[data-hint="phone"]').textContent = 'Telefone invalido. Informe DDD + numero.';
+        form.querySelector('[data-hint="phone"]').textContent = 'Telefone inv\u00e1lido. Informe DDD + n\u00famero.';
         form.querySelector('[data-hint="phone"]').classList.add('error');
         ok = false;
       }
@@ -734,15 +735,15 @@ const App = (() => {
 
       const payNow = payment === 'partial' && hasPreorder ? partialTotal : total;
       const cLines = cartLines();
-      const itemLines = cLines.map(l => `• ${l.qty}x ${l.product.name}${l.product.kind === 'preorder' ? ' (encomenda . ' + l.product.preorderDays + 'd)' : ''} — ${BRL(l.product.price * l.qty)}`).join('%0A');
-      let msg = `Ola Fernanda! Sou ${name} (${phone}) e gostaria de fechar o pedido:%0A%0A${itemLines}%0A%0ASubtotal: ${BRL(subtotal)}`;
+      const itemLines = cLines.map(l => `\u2022 ${l.qty}x ${l.product.name}${l.product.kind === 'preorder' ? ' (encomenda . ' + l.product.preorderDays + 'd)' : ''} \u2014 ${BRL(l.product.price * l.qty)}`).join('%0A');
+      let msg = `Ol\u00e1 Fernanda! Sou ${name} (${phone}) e gostaria de fechar o pedido:%0A%0A${itemLines}%0A%0ASubtotal: ${BRL(subtotal)}`;
       if (appliedPromo) msg += `%0ACupom ${appliedPromo.code}: -${BRL(discount)}`;
       msg += `%0ATotal: ${BRL(total)}`;
       if (hasPreorder) {
         if (payment === 'partial') msg += `%0A%0APagamento: SINAL agora (${BRL(partialTotal)}) + saldo de ${BRL(total - partialTotal)} ao receber.`;
         else msg += `%0A%0APagamento: TOTAL antecipado (${BRL(total)}).`;
       } else {
-        msg += `%0A%0APagamento: a vista (${BRL(total)}).`;
+        msg += `%0A%0APagamento: \u00e0 vista (${BRL(total)}).`;
       }
 
       const baseUrl = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : 'https://wa.me/';
@@ -787,7 +788,7 @@ const App = (() => {
             <h3 style="font-size:var(--fs-xl)">Seus dados</h3>
             <button class="btn-icon" data-action="close-modal" style="width:36px;height:36px">${Icons.close}</button>
           </div>
-          <p class="text-md" style="font-size:var(--fs-sm)">Cadastro minimo: nome completo e telefone. Usaremos apenas para confirmar seus pedidos pelo WhatsApp.</p>
+          <p class="text-md" style="font-size:var(--fs-sm)">Cadastro m\u00ednimo: nome completo e telefone. Usaremos apenas para confirmar seus pedidos pelo WhatsApp.</p>
           <form id="customer-form" class="flex flex-col gap-4 mt-5">
             <div class="field">
               <label>Nome completo</label>
@@ -818,7 +819,7 @@ const App = (() => {
       let ok = true;
       form.querySelectorAll('.input').forEach(i => i.classList.remove('error'));
       if (!isValidName(name)) { form.elements['name'].classList.add('error'); form.querySelector('[data-hint="name"]').textContent = 'Informe nome + sobrenome.'; form.querySelector('[data-hint="name"]').classList.add('error'); ok = false; }
-      if (!isValidPhone(phone)) { form.elements['phone'].classList.add('error'); form.querySelector('[data-hint="phone"]').textContent = 'Telefone invalido.'; form.querySelector('[data-hint="phone"]').classList.add('error'); ok = false; }
+      if (!isValidPhone(phone)) { form.elements['phone'].classList.add('error'); form.querySelector('[data-hint="phone"]').textContent = 'Telefone inv\u00e1lido.'; form.querySelector('[data-hint="phone"]').classList.add('error'); ok = false; }
       if (!ok) return;
       customer = { name, phone };
       DataStore.saveCustomer(customer);
@@ -831,7 +832,7 @@ const App = (() => {
   function shareProduct(id) {
     const p = products.find(x => x.id === id);
     if (!p) return;
-    const text = `${p.name} — ${p.brand}\n${p.description}`;
+    const text = `${p.name} \u2014 ${p.brand}\n${p.description}`;
     if (navigator.share) navigator.share({ title: p.name, text, url: location.href }).catch(() => {});
     else { navigator.clipboard.writeText(`${text}\n${location.href}`); toast('Link copiado'); }
   }
@@ -858,7 +859,7 @@ const App = (() => {
         else if (action === 'checkout')    openCheckoutModal();
         else if (action === 'apply-promo') applyPromo();
         else if (action === 'edit-customer') openCustomerModal();
-        else if (action === 'logout-customer') { customer = null; localStorage.removeItem(STORAGE_KEYS.customer); toast('Sessao encerrada'); render(); }
+        else if (action === 'logout-customer') { customer = null; localStorage.removeItem(STORAGE_KEYS.customer); toast('Sess\u00e3o encerrada'); render(); }
         else if (action === 'close-modal') closeModal();
         else if (action === 'dismiss-promo') { promoBannerDismissed = true; sessionStorage.setItem('fpa.promoDismiss','1'); render(); }
         else if (action === 'contact') { window.open(WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : 'https://wa.me/', '_blank'); }
@@ -893,6 +894,139 @@ const App = (() => {
     setTimeout(() => s.remove(), 2200);
   }
 
+  // ---------- SOCIAL PROOF (fake live notifications) ----------
+  const SOCIAL_PROOF = {
+    sales: [
+      { city: 'S\u00e3o Paulo', name: 'Amanda' },
+      { city: 'Rio de Janeiro', name: 'Camila' },
+      { city: 'Belo Horizonte', name: 'Juliana' },
+      { city: 'Recife', name: 'Fernanda M.' },
+      { city: 'Salvador', name: 'Beatriz' },
+      { city: 'Curitiba', name: 'Larissa' },
+      { city: 'Fortaleza', name: 'Isabela' },
+      { city: 'Bras\u00edlia', name: 'Mariana' },
+      { city: 'Manaus', name: 'Gabriela' },
+      { city: 'Porto Alegre', name: 'Carolina' },
+    ],
+    cta: [
+      'Sua sacola est\u00e1 esperando! Finalize antes que acabe.',
+      'J\u00e1 escolheu sua fragr\u00e2ncia? Explore a cole\u00e7\u00e3o.',
+      'Perfumes \u00e1rabes com pronta entrega para todo o Brasil.',
+      'Frete especial para compras acima de R$ 200.',
+      'D\u00favidas? Fale direto com a Fernanda no WhatsApp.',
+      'Novos perfumes Lattafa chegando toda semana.',
+    ],
+    impact: [
+      'Lattafa Raghba \u2014 o perfume \u00e1rabe mais vendido do mundo.',
+      'Fixa\u00e7\u00e3o de 12h+ \u2014 uma borrifada basta.',
+      'Yara Lattafa \u2014 eleg\u00e2ncia que n\u00e3o precisa de apresenta\u00e7\u00e3o.',
+      'Asad Lattafa \u2014 para quem busca presen\u00e7a e sofistica\u00e7\u00e3o.',
+      'Bade\'e Al Oud \u2014 um oud que transforma qualquer momento.',
+      'Khamrah Lattafa \u2014 quente, envolvente, inesquec\u00edvel.',
+      'Qaed Al Fursan \u2014 o cavaleiro das fragr\u00e2ncias orientais.',
+      'Cada perfume conta uma hist\u00f3ria \u2014 qual \u00e9 a sua?',
+      'Perfumaria \u00e1rabe \u2014 luxo real por pre\u00e7o justo.',
+      'A sil\u00e2ge perfeita: quem passa, nota.',
+    ],
+  };
+  let spTimer = null;
+  let spIndex = 0;
+
+  function showSocialProof() {
+    let host = document.getElementById('social-proof-host');
+    if (!host) {
+      host = document.createElement('div');
+      host.id = 'social-proof-host';
+      host.className = 'social-proof';
+      document.body.appendChild(host);
+    }
+
+    const types = ['sale', 'sale', 'impact', 'sale', 'cta', 'impact'];
+    const type = types[spIndex % types.length];
+    spIndex++;
+
+    let icon = Icons.bag;
+    let html = '';
+
+    if (type === 'sale' && products.length) {
+      const p = products[Math.floor(Math.random() * products.length)];
+      const buyer = SOCIAL_PROOF.sales[Math.floor(Math.random() * SOCIAL_PROOF.sales.length)];
+      const mins = Math.floor(Math.random() * 45) + 2;
+      icon = Icons.bag;
+      html = `<strong>${buyer.name}</strong> de ${buyer.city} ${p.kind === 'preorder' ? 'encomendou' : 'comprou'} <strong>${p.name}</strong> h\u00e1 ${mins} min`;
+    } else if (type === 'impact') {
+      icon = Icons.star;
+      html = SOCIAL_PROOF.impact[Math.floor(Math.random() * SOCIAL_PROOF.impact.length)];
+    } else {
+      icon = Icons.spark;
+      html = SOCIAL_PROOF.cta[Math.floor(Math.random() * SOCIAL_PROOF.cta.length)];
+    }
+
+    const card = document.createElement('div');
+    card.className = 'sp-card';
+    card.innerHTML = `
+      <div class="sp-icon">${icon}</div>
+      <div class="sp-text">${html}</div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.add('sp-out');
+      setTimeout(() => card.remove(), 400);
+    });
+
+    host.innerHTML = '';
+    host.appendChild(card);
+
+    setTimeout(() => {
+      if (card.parentNode) {
+        card.classList.add('sp-out');
+        setTimeout(() => card.remove(), 400);
+      }
+    }, 6000);
+  }
+
+  function startSocialProof() {
+    if (spTimer) return;
+    // First notification after 8 seconds
+    setTimeout(() => {
+      showSocialProof();
+      // Then every 25-45 seconds (randomized)
+      function scheduleNext() {
+        const delay = 25000 + Math.random() * 20000;
+        spTimer = setTimeout(() => {
+          showSocialProof();
+          scheduleNext();
+        }, delay);
+      }
+      scheduleNext();
+    }, 8000);
+  }
+
+  // ---------- AUTO-SCROLL CAROUSEL ----------
+  function initAutoCarousels() {
+    document.querySelectorAll('.carousel-track').forEach(track => {
+      if (track.dataset.autoScroll) return;
+      track.dataset.autoScroll = '1';
+      let paused = false;
+      let dir = 1;
+
+      track.addEventListener('pointerdown', () => { paused = true; });
+      track.addEventListener('pointerup', () => { setTimeout(() => { paused = false; }, 3000); });
+      track.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+      track.addEventListener('touchend', () => { setTimeout(() => { paused = false; }, 3000); });
+
+      function step() {
+        if (!paused && track.parentNode) {
+          const maxScroll = track.scrollWidth - track.clientWidth;
+          if (track.scrollLeft >= maxScroll - 2) dir = -1;
+          if (track.scrollLeft <= 2) dir = 1;
+          track.scrollLeft += dir * 1;
+        }
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
   async function init() {
     bindEvents();
     render(); // show loading state
@@ -905,6 +1039,8 @@ const App = (() => {
     ]);
     loading = false;
     render();
+    startSocialProof();
+    initAutoCarousels();
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js').catch(() => {});
