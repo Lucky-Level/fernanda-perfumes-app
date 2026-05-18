@@ -20,7 +20,8 @@ function dbToProduct(r) {
     rating: parseFloat(r.rating), reviews: r.reviews, stock: r.stock,
     kind: r.kind, preorderDays: r.preorder_days, depositPct: r.deposit_pct,
     tags: r.tags || [], description: r.description || '',
-    color: r.color || '#4B2E24', accent: r.accent || '#C8A96B'
+    color: r.color || '#4B2E24', accent: r.accent || '#C8A96B',
+    imageUrl: r.image_url || null
   };
 }
 
@@ -32,7 +33,8 @@ function productToDb(p) {
     rating: p.rating, reviews: p.reviews, stock: p.stock,
     kind: p.kind, preorder_days: p.preorderDays, deposit_pct: p.depositPct,
     tags: p.tags, description: p.description,
-    color: p.color, accent: p.accent
+    color: p.color, accent: p.accent,
+    image_url: p.imageUrl || null
   };
 }
 
@@ -125,6 +127,20 @@ const DataStore = {
     }
     const { error } = await supabase.from('fp_promos').update({ active }).eq('id', id);
     if (error) console.error('fp_promos toggle:', error);
+  },
+
+  // --- Image Upload (Supabase Storage) ---
+  async uploadImage(file, productId) {
+    const ext = file.name.split('.').pop();
+    const path = `fernanda/${productId}.${ext}`;
+    const { data, error } = await supabase.storage
+      .from('product-images')
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (error) { console.error('upload:', error); return null; }
+    const { data: urlData } = supabase.storage
+      .from('product-images')
+      .getPublicUrl(path);
+    return urlData.publicUrl;
   },
 
   // --- Cart (localStorage) ---

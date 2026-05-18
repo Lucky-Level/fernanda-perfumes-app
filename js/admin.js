@@ -224,7 +224,8 @@ const Admin = (() => {
       stock: 0, kind: 'stock', preorderDays: 14, depositPct: 50,
       description: '', color: '#4B2E24', accent: '#C8A96B',
       rating: 5, reviews: 0, tags: [],
-      notes: { top: '', heart: '', base: '' }
+      notes: { top: '', heart: '', base: '' },
+      imageUrl: null
     };
     return `
       <div class="modal-backdrop open" id="modal-backdrop">
@@ -279,6 +280,16 @@ const Admin = (() => {
               <input class="input" name="tags2" value="${v.tags.join(', ')}" placeholder="exclusive, new">
             </div>
 
+            <div class="card" style="padding:var(--sp-5)">
+              <span class="eyebrow">Imagem do produto</span>
+              <p class="text-lo mt-3" style="font-size:var(--fs-xs)">Suba uma foto real do perfume. Se nao tiver, o frasco SVG sera usado.</p>
+              <div class="mt-3">
+                ${v.imageUrl ? `<div id="img-preview" style="margin-bottom:var(--sp-3)"><img src="${v.imageUrl}" style="width:120px;height:auto;border-radius:var(--r-lg);border:1px solid var(--color-line-soft)"></div>` : '<div id="img-preview"></div>'}
+                <input type="file" name="image" accept="image/*" id="product-image-input" style="font-size:var(--fs-sm)">
+                <input type="hidden" name="imageUrl" value="${v.imageUrl || ''}">
+              </div>
+            </div>
+
             <div class="grid grid-2">
               <div class="field"><label>Cor base (hex)</label><input class="input" name="color" value="${v.color}"></div>
               <div class="field"><label>Dourado (hex)</label><input class="input" name="accent" value="${v.accent}"></div>
@@ -311,6 +322,21 @@ const Admin = (() => {
       document.getElementById('preorder-tags').style.display   = kind === 'preorder' ? '' : 'none';
     }
     form.querySelectorAll('input[name="kind"]').forEach(r => r.addEventListener('change', refreshKind));
+
+    // Image preview
+    const imgInput = document.getElementById('product-image-input');
+    if (imgInput) {
+      imgInput.addEventListener('change', () => {
+        const file = imgInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          document.getElementById('img-preview').innerHTML = `<img src="${ev.target.result}" style="width:120px;height:auto;border-radius:var(--r-lg);border:1px solid var(--color-line-soft);margin-bottom:var(--sp-3)">`;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     form.addEventListener('submit', saveProduct);
   }
 
@@ -326,8 +352,20 @@ const Admin = (() => {
     const kind = f.get('kind') || 'stock';
     const tags = (kind === 'stock' ? f.get('tags') : f.get('tags2'))
       .split(',').map(s => s.trim()).filter(Boolean);
+    const productId = f.get('id') || 'p-' + Math.random().toString(36).slice(2, 7);
+
+    // Upload image if selected
+    let imageUrl = f.get('imageUrl') || null;
+    const imageFile = document.getElementById('product-image-input').files[0];
+    if (imageFile) {
+      toast('Enviando imagem...');
+      const url = await DataStore.uploadImage(imageFile, productId);
+      if (url) imageUrl = url;
+      else toast('Erro ao enviar imagem');
+    }
+
     const data = {
-      id: f.get('id') || 'p-' + Math.random().toString(36).slice(2, 7),
+      id: productId,
       name: f.get('name').trim(),
       brand: f.get('brand').trim(),
       family: f.get('family').trim(),
@@ -343,7 +381,8 @@ const Admin = (() => {
       notes: { top: f.get('top').trim(), heart: f.get('heart').trim(), base: f.get('base').trim() },
       description: f.get('description').trim(),
       rating: editing ? editing.rating : 5,
-      reviews: editing ? editing.reviews : 0
+      reviews: editing ? editing.reviews : 0,
+      imageUrl
     };
 
     await DataStore.saveProduct(data);

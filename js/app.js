@@ -87,12 +87,17 @@ const App = (() => {
     return html;
   }
 
+  function productVisual(p, size = 160) {
+    if (p.imageUrl) return `<img src="${p.imageUrl}" alt="${p.name}" style="width:${size}px;height:${size * 1.4}px;object-fit:contain;" loading="lazy">`;
+    return bottleSVG(p.color, p.accent, size);
+  }
+
   function perfumeCardHTML(p) {
     const isFav = favs.includes(p.id);
     return `
     <article class="card perfume-card glow-hover rise-in" data-id="${p.id}">
       <div class="media">
-        <div class="bottle">${bottleSVG(p.color, p.accent, 160)}</div>
+        <div class="bottle">${productVisual(p, 160)}</div>
         <div class="badges">${renderBadges(p)}</div>
         <button class="fav ${isFav ? 'active' : ''}" data-action="fav" aria-label="Favoritar">
           ${isFav ? Icons.heartFill : Icons.heart}
@@ -285,7 +290,7 @@ const App = (() => {
 
         <div class="grid grid-2-lg mt-6" style="gap:var(--sp-8); align-items:center;">
           <div class="product-stage rise-in">
-            <div class="bottle-stage">${bottleSVG(p.color, p.accent, 280)}</div>
+            <div class="bottle-stage">${productVisual(p, 280)}</div>
             <div class="badges" style="position:absolute;top:20px;left:20px;display:flex;flex-direction:column;gap:8px;">
               ${renderBadges(p)}
             </div>
@@ -413,7 +418,7 @@ const App = (() => {
         <div class="grid mt-6" style="gap:var(--sp-3)">
           ${lines.map(({ product: p, qty }) => `
             <div class="line-item">
-              <div class="thumb">${bottleSVG(p.color, p.accent, 60)}</div>
+              <div class="thumb">${productVisual(p, 60)}</div>
               <div style="flex:1;display:flex;flex-direction:column;gap:4px;justify-content:center;min-width:0">
                 <span class="text-gold" style="font-size:var(--fs-xs);letter-spacing:var(--tracking-wider);text-transform:uppercase">${p.brand}</span>
                 <strong style="font-family:var(--font-serif);font-size:var(--fs-lg)">${p.name}</strong>
