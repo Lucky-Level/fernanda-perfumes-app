@@ -399,11 +399,17 @@ const Admin = (() => {
   }
 
   async function deleteProduct(id) {
+    if (!id) { toast('Erro: produto sem ID'); return; }
     if (!confirm('Excluir este perfume?')) return;
-    await DataStore.deleteProduct(id);
-    products = await DataStore.products();
-    toast('Perfume removido');
-    render();
+    try {
+      await DataStore.deleteProduct(id);
+      products = await DataStore.products();
+      toast('Perfume removido');
+      render();
+    } catch (e) {
+      console.error('deleteProduct error:', e);
+      toast('Erro ao excluir: ' + e.message);
+    }
   }
 
   // ---------- ORDERS ----------
