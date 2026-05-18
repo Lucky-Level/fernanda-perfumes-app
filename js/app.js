@@ -345,7 +345,7 @@ const App = (() => {
                 <div style="font-family:var(--font-serif);font-size:var(--fs-3xl);color:var(--color-gold);line-height:1">${BRL(p.price)}</div>
                 <div class="text-lo" style="font-size:var(--fs-xs)">em at\u00e9 6x sem juros</div>
               </div>
-              <div class="flex gap-3" style="flex:1;min-width:200px">
+              <div class="flex gap-3" style="flex:1;min-width:0">
                 <button class="btn btn-primary btn-block btn-lg" data-action="add-to-cart" data-id="${p.id}">${Icons.bag} ${isPreorder ? 'Reservar encomenda' : 'Adicionar ao carrinho'}</button>
                 <button class="btn-icon" data-action="fav" data-id="${p.id}" aria-label="Favoritar">
                   ${isFav ? Icons.heartFill : Icons.heart}

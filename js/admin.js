@@ -258,14 +258,14 @@ const Admin = (() => {
             <div class="card" style="padding:var(--sp-5)">
               <span class="eyebrow">Tipo de produto</span>
               <div class="flex gap-3 mt-3" style="flex-wrap:wrap">
-                <label class="pay-option" style="flex:1;min-width:140px">
+                <label class="pay-option" style="flex:1;min-width:120px">
                   <input type="radio" name="kind" value="stock" ${v.kind === 'stock' ? 'checked' : ''}>
                   <div>
                     <strong>Pronta entrega</strong>
                     <div class="text-lo" style="font-size:var(--fs-xs)">Tenho em estoque . envio r\u00e1pido</div>
                   </div>
                 </label>
-                <label class="pay-option" style="flex:1;min-width:140px">
+                <label class="pay-option" style="flex:1;min-width:120px">
                   <input type="radio" name="kind" value="preorder" ${v.kind === 'preorder' ? 'checked' : ''}>
                   <div>
                     <strong>Encomenda</strong>

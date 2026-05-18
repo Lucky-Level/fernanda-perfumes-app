@@ -1,5 +1,5 @@
 /* Fernanda · Service Worker — cache-first for shell assets */
-const CACHE = 'fernanda-v1';
+const CACHE = 'fernanda-v2';
 const SHELL = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const SHELL = [
   './css/tokens.css',
   './css/base.css',
   './css/components.css',
+  './js/supabase-config.js',
   './js/data.js',
   './js/icons.js',
   './js/app.js',
