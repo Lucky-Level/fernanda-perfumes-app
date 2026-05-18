@@ -291,8 +291,8 @@ const Admin = (() => {
             </div>
 
             <div class="grid grid-2">
-              <div class="field"><label>Cor base (hex)</label><input class="input" name="color" value="${v.color}"></div>
-              <div class="field"><label>Dourado (hex)</label><input class="input" name="accent" value="${v.accent}"></div>
+              <div class="field"><label>Cor do frasco</label><div class="flex gap-3 items-center"><input type="color" name="color" value="${v.color}" style="width:48px;height:40px;border:none;background:none;cursor:pointer;padding:0"><span class="text-lo" style="font-size:var(--fs-xs)" id="color-hex">${v.color}</span></div></div>
+              <div class="field"><label>Cor do detalhe</label><div class="flex gap-3 items-center"><input type="color" name="accent" value="${v.accent}" style="width:48px;height:40px;border:none;background:none;cursor:pointer;padding:0"><span class="text-lo" style="font-size:var(--fs-xs)" id="accent-hex">${v.accent}</span></div></div>
             </div>
             <div class="field"><label>Notas de saida</label><input class="input" name="top" value="${v.notes.top}"></div>
             <div class="field"><label>Notas de coracao</label><input class="input" name="heart" value="${v.notes.heart}"></div>
@@ -322,6 +322,12 @@ const Admin = (() => {
       document.getElementById('preorder-tags').style.display   = kind === 'preorder' ? '' : 'none';
     }
     form.querySelectorAll('input[name="kind"]').forEach(r => r.addEventListener('change', refreshKind));
+
+    // Color picker live hex display
+    const colorInput = form.elements['color'];
+    const accentInput = form.elements['accent'];
+    if (colorInput) colorInput.addEventListener('input', () => { document.getElementById('color-hex').textContent = colorInput.value; });
+    if (accentInput) accentInput.addEventListener('input', () => { document.getElementById('accent-hex').textContent = accentInput.value; });
 
     // Image preview
     const imgInput = document.getElementById('product-image-input');
