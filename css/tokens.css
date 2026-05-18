@@ -1,0 +1,126 @@
+/* =============================================================
+   FERNANDA PERFUMES ÁRABES — DESIGN TOKENS
+   Luxo acessível · Sofisticação oriental · Premium moderno
+   ============================================================= */
+
+:root {
+  /* ---------- COLOR · Primary ---------- */
+  --color-black-deep:      #0D0D0D;
+  --color-gold:            #C8A96B;
+  --color-amber-brown:     #4B2E24;
+
+  /* ---------- COLOR · Secondary ---------- */
+  --color-sand:            #D8C3A5;
+  --color-nude:            #E8DCCF;
+  --color-warm-white:      #F8F5F0;
+
+  /* ---------- COLOR · Support ---------- */
+  --color-olive:           #4D5B43;
+  --color-wine:            #5A1E2A;
+
+  /* ---------- COLOR · Variations & States ---------- */
+  --color-gold-light:      #E5C98A;
+  --color-gold-dark:       #9A7E48;
+  --color-gold-soft:       rgba(200, 169, 107, 0.16);
+  --color-gold-glow:       rgba(200, 169, 107, 0.35);
+
+  --color-bg-0:            #0A0A0A;
+  --color-bg-1:            #111110;
+  --color-bg-2:            #18140F;
+  --color-bg-3:            #221C14;
+
+  --color-line:            rgba(200, 169, 107, 0.22);
+  --color-line-soft:       rgba(232, 220, 207, 0.08);
+
+  --color-text-hi:         #F8F5F0;
+  --color-text-md:         #D8C3A5;
+  --color-text-lo:         rgba(232, 220, 207, 0.58);
+  --color-text-on-gold:    #1A130A;
+
+  --color-success:         #6FAE6A;
+  --color-warning:         #E5B96A;
+  --color-danger:          #C75A5A;
+
+  /* ---------- GLASS / OVERLAY ---------- */
+  --glass-bg:              rgba(24, 20, 15, 0.55);
+  --glass-bg-strong:       rgba(13, 13, 13, 0.78);
+  --glass-blur:            18px;
+  --glass-border:          1px solid rgba(200, 169, 107, 0.20);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --font-serif:  'Cormorant Garamond', 'Cinzel', 'Playfair Display', Georgia, serif;
+  --font-sans:   'Inter', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --fs-xs:    11px;
+  --fs-sm:    13px;
+  --fs-md:    15px;
+  --fs-lg:    18px;
+  --fs-xl:    22px;
+  --fs-2xl:   28px;
+  --fs-3xl:   36px;
+  --fs-4xl:   48px;
+  --fs-5xl:   64px;
+
+  --lh-tight: 1.15;
+  --lh-base:  1.5;
+  --lh-loose: 1.75;
+
+  --tracking-tight:  -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;
+  --tracking-wider:  0.18em;
+
+  /* ---------- SPACING (8pt scale) ---------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-7:  32px;
+  --sp-8:  40px;
+  --sp-9:  56px;
+  --sp-10: 72px;
+
+  /* ---------- RADIUS ---------- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  /* ---------- SHADOW ---------- */
+  --sh-1: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --sh-2: 0 8px 28px rgba(0, 0, 0, 0.45);
+  --sh-3: 0 20px 60px rgba(0, 0, 0, 0.55);
+  --sh-gold-soft:  0 0 0 1px rgba(200, 169, 107, 0.25), 0 10px 30px rgba(200, 169, 107, 0.12);
+  --sh-gold-glow:  0 0 24px rgba(200, 169, 107, 0.32);
+
+  /* ---------- GRADIENTS ---------- */
+  --grad-gold:       linear-gradient(135deg, #E5C98A 0%, #C8A96B 45%, #9A7E48 100%);
+  --grad-gold-soft:  linear-gradient(135deg, rgba(229,201,138,0.18), rgba(154,126,72,0.05));
+  --grad-dark:       linear-gradient(180deg, #0A0A0A 0%, #18140F 100%);
+  --grad-cinema:     radial-gradient(120% 80% at 50% 0%, rgba(200,169,107,0.22) 0%, rgba(13,13,13,0) 60%),
+                     linear-gradient(180deg, #0A0A0A 0%, #1A130A 60%, #0A0A0A 100%);
+
+  /* ---------- MOTION ---------- */
+  --ease-soft:  cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-luxe:  cubic-bezier(0.65, 0, 0.35, 1);
+  --d-fast:    180ms;
+  --d-base:    320ms;
+  --d-slow:    560ms;
+  --d-cinema:  900ms;
+
+  /* ---------- LAYOUT ---------- */
+  --container:  1200px;
+  --header-h:   64px;
+  --bottom-nav-h: 68px;
+  --z-nav:    50;
+  --z-modal:  90;
+  --z-toast:  95;
+  --z-splash: 100;
+}
+
+/* Force dark theme — the brand lives in the dark. */
+:root { color-scheme: dark; }

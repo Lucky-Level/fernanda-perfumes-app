@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0D0D0D" />
+  <meta name="description" content="Fernanda Perfumes Árabes — boutique de fragrâncias importadas com curadoria premium." />
+  <title>Fernanda · Perfumes Árabes</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+  <link rel="apple-touch-icon" href="./icons/icon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./css/tokens.css" />
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="logo-wrap">
+      <img src="./icons/icon.svg" alt="Fernanda Perfumes Árabes" width="220" height="220" />
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container">
+      <a class="brand" href="./index.html">
+        <span class="mark" style="font-size:20px">F</span>
+        <span class="wordmark">
+          <span class="top">Fernanda</span>
+          <span class="sub">Perfumes Árabes</span>
+        </span>
+      </a>
+
+      <div class="search-inline">
+        <div class="search">
+          <span class="icon-left" id="ic-search"></span>
+          <input id="search-input" class="input" type="search" placeholder="Buscar perfumes, notas, marcas…" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-icon" data-go="favs" aria-label="Favoritos" id="btn-fav-top"></button>
+        <button class="btn-icon" data-go="cart" aria-label="Sacola" id="btn-cart-top">
+          <span id="btn-cart-icon"></span>
+          <span class="badge-count" id="cart-count" style="display:none">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEW -->
+  <main class="container page">
+    <div id="view"></div>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" role="tablist" aria-label="Navegação principal">
+    <button class="item active" data-view="home" role="tab">
+      <span class="icon" id="ic-home"></span>
+      <span class="label">Início</span>
+    </button>
+    <button class="item" data-view="catalog" role="tab">
+      <span class="icon" id="ic-catalog"></span>
+      <span class="label">Coleção</span>
+    </button>
+    <button class="item" data-view="favs" role="tab">
+      <span class="icon" id="ic-heart"></span>
+      <span class="label">Favoritos</span>
+    </button>
+    <button class="item" data-view="cart" role="tab">
+      <span class="icon" id="ic-bag"></span>
+      <span class="label">Sacola</span>
+    </button>
+    <button class="item" data-view="account" role="tab">
+      <span class="icon" id="ic-user"></span>
+      <span class="label">Conta</span>
+    </button>
+  </nav>
+
+  <!-- Modal host (checkout, cadastro do cliente) -->
+  <div id="modal-host"></div>
+
+  <!-- TOASTS -->
+  <div id="toast-host" class="toast-host" aria-live="polite"></div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="./js/supabase-config.js"></script>
+  <script src="./js/icons.js"></script>
+  <script src="./js/data.js"></script>
+  <script src="./js/app.js"></script>
+  <script>
+    // Wire icons into the header & bottom nav
+    document.getElementById('ic-search').innerHTML = Icons.search;
+    document.getElementById('btn-fav-top').insertAdjacentHTML('afterbegin', Icons.heart);
+    document.getElementById('btn-cart-icon').innerHTML = Icons.cart;
+    document.getElementById('ic-home').innerHTML = Icons.home;
+    document.getElementById('ic-catalog').innerHTML = Icons.bottle;
+    document.getElementById('ic-heart').innerHTML = Icons.heart;
+    document.getElementById('ic-bag').innerHTML = Icons.bag;
+    document.getElementById('ic-user').innerHTML = Icons.user;
+  </script>
+</body>
+</html>

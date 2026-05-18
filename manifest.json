@@ -1,0 +1,20 @@
+{
+  "name": "Fernanda · Perfumes Árabes",
+  "short_name": "Fernanda",
+  "description": "Boutique de perfumes árabes premium · curadoria, importação e atendimento exclusivo.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D0D0D",
+  "theme_color": "#0D0D0D",
+  "lang": "pt-BR",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    { "src": "./icons/icon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Coleção", "url": "./index.html" },
+    { "name": "Painel Admin", "url": "./admin.html" }
+  ]
+}
