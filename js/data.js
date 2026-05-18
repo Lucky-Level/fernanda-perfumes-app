@@ -75,57 +75,57 @@ function promoToDb(p) {
 const DataStore = {
   // --- Products (Supabase) ---
   async products() {
-    const { data, error } = await supabase.from('fp_products').select('*').order('created_at');
+    const { data, error } = await sb.from('fp_products').select('*').order('created_at');
     if (error) { console.error('fp_products fetch:', error); return []; }
     return data.map(dbToProduct);
   },
   async saveProduct(p) {
     const row = productToDb(p);
-    const { error } = await supabase.from('fp_products').upsert(row, { onConflict: 'id' });
+    const { error } = await sb.from('fp_products').upsert(row, { onConflict: 'id' });
     if (error) console.error('fp_products upsert:', error);
   },
   async deleteProduct(id) {
-    const { error } = await supabase.from('fp_products').delete().eq('id', id);
+    const { error } = await sb.from('fp_products').delete().eq('id', id);
     if (error) console.error('fp_products delete:', error);
   },
 
   // --- Orders (Supabase) ---
   async orders() {
-    const { data, error } = await supabase.from('fp_orders').select('*').order('created_at', { ascending: false });
+    const { data, error } = await sb.from('fp_orders').select('*').order('created_at', { ascending: false });
     if (error) { console.error('fp_orders fetch:', error); return []; }
     return data.map(dbToOrder);
   },
   async saveOrder(o) {
     const row = orderToDb(o);
-    const { error } = await supabase.from('fp_orders').upsert(row, { onConflict: 'id' });
+    const { error } = await sb.from('fp_orders').upsert(row, { onConflict: 'id' });
     if (error) console.error('fp_orders upsert:', error);
   },
   async updateOrderStatus(id, status) {
-    const { error } = await supabase.from('fp_orders').update({ status }).eq('id', id);
+    const { error } = await sb.from('fp_orders').update({ status }).eq('id', id);
     if (error) console.error('fp_orders update:', error);
   },
 
   // --- Promos (Supabase) ---
   async promos() {
-    const { data, error } = await supabase.from('fp_promos').select('*').order('created_at');
+    const { data, error } = await sb.from('fp_promos').select('*').order('created_at');
     if (error) { console.error('fp_promos fetch:', error); return []; }
     return data.map(dbToPromo);
   },
   async savePromo(p) {
     const row = promoToDb(p);
-    const { error } = await supabase.from('fp_promos').upsert(row, { onConflict: 'id' });
+    const { error } = await sb.from('fp_promos').upsert(row, { onConflict: 'id' });
     if (error) console.error('fp_promos upsert:', error);
   },
   async deletePromo(id) {
-    const { error } = await supabase.from('fp_promos').delete().eq('id', id);
+    const { error } = await sb.from('fp_promos').delete().eq('id', id);
     if (error) console.error('fp_promos delete:', error);
   },
   async setPromoActive(id, active) {
     if (active) {
       // desativa todas antes de ativar a selecionada
-      await supabase.from('fp_promos').update({ active: false }).neq('id', id);
+      await sb.from('fp_promos').update({ active: false }).neq('id', id);
     }
-    const { error } = await supabase.from('fp_promos').update({ active }).eq('id', id);
+    const { error } = await sb.from('fp_promos').update({ active }).eq('id', id);
     if (error) console.error('fp_promos toggle:', error);
   },
 
@@ -133,11 +133,11 @@ const DataStore = {
   async uploadImage(file, productId) {
     const ext = file.name.split('.').pop();
     const path = `fernanda/${productId}.${ext}`;
-    const { data, error } = await supabase.storage
+    const { data, error } = await sb.storage
       .from('product-images')
       .upload(path, file, { upsert: true, contentType: file.type });
     if (error) { console.error('upload:', error); return null; }
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = sb.storage
       .from('product-images')
       .getPublicUrl(path);
     return urlData.publicUrl;
@@ -163,7 +163,7 @@ const DataStore = {
 
   // --- Admin auth (Supabase RPC) ---
   async verifyAdmin(password) {
-    const { data, error } = await supabase.rpc('fp_verify_admin_password', { pwd: password });
+    const { data, error } = await sb.rpc('fp_verify_admin_password', { pwd: password });
     if (error) { console.error('admin verify:', error); return false; }
     return data === true;
   }
